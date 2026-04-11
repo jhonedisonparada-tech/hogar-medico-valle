@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fórmulas Médicas | Hogar Médico del Valle</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Unificado -->
+    <link rel="stylesheet" href="css/medico.css">
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="medico-dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="medico-paciente.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Mis Pacientes</span>
+            </a>
+            <a href="medico-citas.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Mis Citas</span>
+            </a>
+            <a href="medico-historias.html" class="nav-item">
+                <i class="fas fa-notes-medical"></i>
+                <span>Historias Clínicas</span>
+            </a>
+            <a href="medico-formulas.html" class="nav-item active">
+                <i class="fas fa-prescription"></i>
+                <span>Fórmulas Médicas</span>
+            </a>
+            <a href="medico-incapacidades.html" class="nav-item">
+                <i class="fas fa-file-medical"></i>
+                <span>Incapacidades</span>
+            </a>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Dr. Miguel Sánchez</span>
+                <span class="user-role">Médico</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-prescription"></i>
+                Fórmulas Médicas
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+                <button class="btn-primary" id="nuevaFormulaBtn">
+                    <i class="fas fa-plus"></i> Nueva Fórmula
+                </button>
+            </div>
+        </header>
+
+        <!-- BUSCADOR POR CÉDULA -->
+        <div class="buscador-container">
+            <div class="search-box-large">
+                <i class="fas fa-search"></i>
+                <input type="text" id="buscarDocumento" placeholder="Buscar paciente por número de cédula o documento..." autocomplete="off">
+                <button class="btn-primary" id="btnBuscar">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+            <div class="search-results" id="resultadosBusqueda" style="display: none;">
+                <!-- Resultados de búsqueda aparecen aquí -->
+            </div>
+        </div>
+
+        <!-- LISTA DE FÓRMULAS (se muestra cuando se selecciona un paciente) -->
+        <div class="table-container" id="formulasContainer" style="display: none;">
+            <div class="table-header">
+                <h3>
+                    <i class="fas fa-history"></i>
+                    Fórmulas Anteriores de <span id="pacienteNombreSeleccionado"></span>
+                </h3>
+            </div>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Medicamentos</th>
+                            <th>Indicaciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="formulasBody">
+                        <tr><td colspan="4" class="loading-message">Seleccione un paciente</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL PARA NUEVA FÓRMULA -->
+    <div class="modal" id="formulaModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-prescription"></i> Nueva Fórmula Médica</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formulaForm">
+                    <input type="hidden" id="pacienteId">
+                    
+                    <div class="form-group">
+                        <label>Paciente</label>
+                        <input type="text" id="pacienteNombreModal" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Documento</label>
+                        <input type="text" id="pacienteDocumentoModal" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha <span class="required">*</span></label>
+                        <input type="date" id="fechaFormula" class="form-control" required>
+                    </div>
+                    <h4>Medicamentos</h4>
+                    <div id="medicamentos-container">
+                        <div class="medicamento-row">
+                            <input type="text" placeholder="Medicamento" class="medicamento-nombre">
+                            <input type="text" placeholder="Dosis" class="medicamento-dosis">
+                            <input type="text" placeholder="Frecuencia" class="medicamento-frecuencia">
+                            <input type="text" placeholder="Duración" class="medicamento-duracion">
+                            <button type="button" class="btn-remove" onclick="eliminarMedicamento(this)">×</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" id="agregarMedicamento">
+                        <i class="fas fa-plus"></i> Agregar Medicamento
+                    </button>
+                    <div class="form-group">
+                        <label>Indicaciones adicionales</label>
+                        <textarea id="indicaciones" rows="3" class="form-control"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelarModal">Cancelar</button>
+                <button class="btn-primary" id="guardarFormula">Guardar Fórmula</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/medico-formulas.js"></script>
+</body>
+</html>

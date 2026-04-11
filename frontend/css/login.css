@@ -1,0 +1,445 @@
+/* ============================================ */
+/* LOGIN - HOGAR MÉDICO DEL VALLE               */
+/* VERSIÓN COMPLETA CON TODAS LAS OPCIONES      */
+/* ============================================ */
+
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-800);
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    max-width: 1300px;
+    height: 800px;
+    background: var(--white);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================ */
+/* CAJA DE LOGIN                                */
+/* ============================================ */
+.login-box {
+    flex: 1;
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.login-logo {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    background: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+}
+
+.login-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.login-subtitle {
+    font-size: 1rem;
+    color: var(--gray-500);
+    font-weight: 400;
+}
+
+/* ============================================ */
+/* FORMULARIO                                   */
+/* ============================================ */
+.login-form {
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    background: var(--gray-100);
+    transition: var(--transition);
+}
+
+.input-group:focus-within {
+    background: var(--white);
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.1);
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    color: var(--gray-400);
+    font-size: 1.1rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    color: var(--gray-800);
+    font-family: 'Inter', sans-serif;
+}
+
+.input-group input:focus {
+    outline: none;
+}
+
+.input-group input::placeholder {
+    color: var(--gray-400);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.toggle-password:hover {
+    color: var(--secondary);
+}
+
+/* ============================================ */
+/* OPCIONES ADICIONALES                         */
+/* ============================================ */
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-600);
+    cursor: pointer;
+}
+
+.remember input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--secondary);
+}
+
+.forgot-link {
+    color: var(--secondary);
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.forgot-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* ============================================ */
+/* BOTÓN DE LOGIN                               */
+/* ============================================ */
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--secondary), #2980b9);
+    color: var(--white);
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(52, 152, 219, 0.4);
+}
+
+.login-btn i {
+    transition: var(--transition);
+}
+
+.login-btn:hover i {
+    transform: translateX(5px);
+}
+
+.login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================ */
+/* REGISTRO                                     */
+/* ============================================ */
+.register-link {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.register-link p {
+    color: var(--gray-600);
+}
+
+.register-link a {
+    color: var(--secondary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* ============================================ */
+/* MENSAJE DE ERROR                             */
+/* ============================================ */
+.error-message {
+    background: #fee2e2;
+    color: var(--danger);
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.error-message.show {
+    display: flex;
+}
+
+.error-message i {
+    font-size: 1.1rem;
+}
+
+/* ============================================ */
+/* FOOTER                                       */
+/* ============================================ */
+.login-footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--gray-500);
+}
+
+.login-footer a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.version {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: var(--gray-400);
+}
+
+/* ============================================ */
+/* DECORACIÓN                                   */
+/* ============================================ */
+.login-decoration {
+    flex: 1;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    padding: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-decoration::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+}
+
+.login-decoration::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    bottom: -50px;
+    left: -50px;
+}
+
+.decoration-content {
+    text-align: center;
+    max-width: 400px;
+    position: relative;
+    z-index: 1;
+}
+
+.decoration-content i {
+    font-size: 5rem;
+    margin-bottom: 25px;
+    opacity: 0.9;
+}
+
+.decoration-content h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.decoration-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.decoration-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.feature i {
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--success);
+}
+
+/* ============================================ */
+/* RESPONSIVE                                   */
+/* ============================================ */
+@media (max-width: 992px) {
+    .login-container {
+        height: auto;
+        margin: 30px;
+        flex-direction: column;
+    }
+    
+    .login-decoration {
+        padding: 60px 30px;
+    }
+    
+    .login-logo {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-box {
+        padding: 40px 30px;
+    }
+    
+    .login-title {
+        font-size: 1.8rem;
+    }
+    
+    .remember-forgot {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .decoration-features {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-box {
+        padding: 30px 20px;
+    }
+    
+    .login-logo {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .login-title {
+        font-size: 1.5rem;
+    }
+    
+    .login-decoration {
+        display: none;
+    }
+}

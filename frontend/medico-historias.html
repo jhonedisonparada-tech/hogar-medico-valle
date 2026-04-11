@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia Clínica | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/medico.css">
+    <style>
+        /* Estilos adicionales para las nuevas tablas */
+        .seccion-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .seccion-titulo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .seccion-titulo h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+        .tabla-ordenes {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tabla-ordenes th {
+            background: #f8fafc;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .tabla-ordenes td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #edf2f7;
+            color: #334155;
+        }
+        .tabla-ordenes tbody tr:hover {
+            background: #f1f5f9;
+        }
+        .badge-estado {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-pendiente { background: #fff3cd; color: #856404; }
+        .badge-completado { background: #d4edda; color: #155724; }
+        .badge-cancelado { background: #f8d7da; color: #721c24; }
+        .btn-accion {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 1rem;
+        }
+        .btn-accion:hover { color: #3498db; }
+    </style>
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text"><strong>Hogar Médico</strong> del Valle</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="medico-dashboard.html" class="nav-item"><i class="fas fa-home"></i> Inicio</a>
+            <a href="medico-paciente.html" class="nav-item"><i class="fas fa-users"></i> Mis Pacientes</a>
+            <a href="medico-citas.html" class="nav-item"><i class="fas fa-calendar-check"></i> Mis Citas</a>
+            <a href="medico-historias.html" class="nav-item active"><i class="fas fa-notes-medical"></i> Historia Clínica</a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Dr. Miguel Sánchez</span>
+                <span class="user-role">Médico</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title"><i class="fas fa-notes-medical"></i> Historia Clínica</h1>
+            <div class="header-actions">
+                <div class="date-display"><i class="far fa-calendar-alt"></i> <span id="fechaActual"></span></div>
+            </div>
+        </header>
+
+        <!-- BUSCADOR DE PACIENTE -->
+        <div class="buscador-container">
+            <div class="search-box-large">
+                <i class="fas fa-search"></i>
+                <input type="text" id="buscarDocumento" placeholder="Buscar paciente por número de cédula...">
+                <button class="btn-primary" id="btnBuscar"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+            <div class="search-results" id="resultadosBusqueda" style="display: none;"></div>
+        </div>
+
+        <!-- DATOS DEL PACIENTE -->
+        <div class="paciente-info-card" id="infoPaciente" style="display: none;">
+            <div class="info-grid">
+                <div class="info-item"><span class="info-label">Nombre</span><span class="info-value" id="pacienteNombre">-</span></div>
+                <div class="info-item"><span class="info-label">Documento</span><span class="info-value" id="pacienteDocumento">-</span></div>
+                <div class="info-item"><span class="info-label">Edad</span><span class="info-value" id="pacienteEdad">-</span></div>
+                <div class="info-item"><span class="info-label">Género</span><span class="info-value" id="pacienteGenero">-</span></div>
+                <div class="info-item"><span class="info-label">Teléfono</span><span class="info-value" id="pacienteTelefono">-</span></div>
+                <div class="info-item"><span class="info-label">Email</span><span class="info-value" id="pacienteEmail">-</span></div>
+            </div>
+        </div>
+
+        <!-- CONTENEDOR DE SECCIONES -->
+        <div id="seccionesContainer" style="display: none;">
+            
+            <!-- CONSULTAS -->
+            <div class="seccion-container">
+                <div class="seccion-titulo">
+                    <h3><i class="fas fa-notes-medical"></i> Consultas</h3>
+                    <button class="btn-primary" onclick="nuevaConsulta()"><i class="fas fa-plus"></i> Nueva Consulta</button>
+                </div>
+                <div class="timeline" id="consultasTimeline"></div>
+            </div>
+
+            <!-- ORDENAMIENTOS / PARACLÍNICOS -->
+            <div class="seccion-container">
+                <div class="seccion-titulo">
+                    <h3><i class="fas fa-flask" style="color:#9b59b6;"></i> Ordenamientos / Paraclínicos</h3>
+                    <button class="btn-primary" onclick="nuevoParaclinico()"><i class="fas fa-plus"></i> Nueva Orden</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="tabla-ordenes">
+                        <thead>
+                            <tr><th>Fecha</th><th>Examen / Procedimiento</th><th>Indicaciones</th><th>Estado</th><th>Resultado</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody id="paraclinicosBody"><tr><td colspan="6" class="loading-message">No hay órdenes</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MEDICAMENTOS -->
+            <div class="seccion-container">
+                <div class="seccion-titulo">
+                    <h3><i class="fas fa-pills" style="color:#27ae60;"></i> Medicamentos</h3>
+                    <button class="btn-primary" onclick="nuevoMedicamento()"><i class="fas fa-plus"></i> Recetar</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="tabla-ordenes">
+                        <thead>
+                            <tr><th>Fecha</th><th>Medicamento</th><th>Dosis</th><th>Frecuencia</th><th>Duración</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody id="medicamentosBody"><tr><td colspan="6" class="loading-message">No hay medicamentos</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- INCAPACIDADES -->
+            <div class="seccion-container">
+                <div class="seccion-titulo">
+                    <h3><i class="fas fa-file-medical" style="color:#e67e22;"></i> Incapacidades</h3>
+                    <button class="btn-primary" onclick="nuevaIncapacidad()"><i class="fas fa-plus"></i> Nueva Incapacidad</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="tabla-ordenes">
+                        <thead>
+                            <tr><th>Fecha</th><th>Diagnóstico</th><th>Días</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody id="incapacidadesBody"><tr><td colspan="6" class="loading-message">No hay incapacidades</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- OTRAS SECCIONES (Laboratorios, Fórmulas, Interconsultas, Imágenes, Órdenes) pueden ir aquí si existen -->
+        </div>
+    </main>
+
+    <script src="js/medico-historias.js"></script>
+</body>
+</html>

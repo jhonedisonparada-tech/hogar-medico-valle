@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Citas | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/paciente.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text"><strong>Hogar Médico</strong> del Valle</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="paciente-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Inicio</span></a>
+            <a href="paciente-citas.html" class="nav-item active"><i class="fas fa-calendar-check"></i><span>Mis Citas</span></a>
+            <a href="paciente-historia.html" class="nav-item"><i class="fas fa-notes-medical"></i><span>Mi Historia</span></a>
+            <a href="paciente-incapacidades.html" class="nav-item"><i class="fas fa-file-medical"></i><span>Incapacidades</span></a>
+            <a href="paciente-formulas.html" class="nav-item"><i class="fas fa-pills"></i><span>Fórmulas</span></a>
+            <a href="paciente-examenes.html" class="nav-item"><i class="fas fa-flask"></i><span>Exámenes</span></a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Paciente</span>
+                <span class="user-role">Paciente</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title"><i class="fas fa-calendar-check"></i> Mis Citas</h1>
+            <div class="header-actions">
+                <div class="date-display"><i class="far fa-calendar-alt"></i> <span id="fechaActual"></span></div>
+                <button class="btn-primary" id="btnNuevaCita"><i class="fas fa-plus"></i> Solicitar Cita</button>
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="section-card" style="padding:16px 24px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="filter-btn active" data-filter="proximas">Próximas</button>
+                <button class="filter-btn" data-filter="todas">Todas</button>
+                <button class="filter-btn" data-filter="completadas">Completadas</button>
+                <button class="filter-btn" data-filter="canceladas">Canceladas</button>
+            </div>
+        </div>
+
+        <!-- TABLA DE CITAS -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-list"></i> Listado de Citas</h3>
+                <span id="totalCitas" style="color:#64748b; font-size:0.9rem;"></span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Médico</th>
+                            <th>Especialidad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citasBody">
+                        <tr><td colspan="6" class="loading-msg"><i class="fas fa-spinner fa-spin"></i> Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL NUEVA CITA -->
+    <div class="modal" id="modalNuevaCita" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-plus"></i> Solicitar Nueva Cita</h3>
+                <button class="modal-close" id="cerrarModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><i class="fas fa-stethoscope"></i> Especialidad</label>
+                    <select id="selectEspecialidad" class="form-control">
+                        <option value="">-- Seleccione especialidad --</option>
+                        <option value="1">Medicina General</option>
+                        <option value="2">Pediatría</option>
+                        <option value="3">Cardiología</option>
+                        <option value="4">Dermatología</option>
+                        <option value="5">Ginecología</option>
+                        <option value="6">Traumatología</option>
+                        <option value="7">Oftalmología</option>
+                        <option value="8">Psiquiatría</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user-md"></i> Médico</label>
+                    <select id="selectMedico" class="form-control">
+                        <option value="">-- Seleccione especialidad primero --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="far fa-calendar-alt"></i> Fecha <small style="color:#94a3b8;">(Lunes a Viernes)</small></label>
+                    <input type="date" id="inputFecha" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label><i class="far fa-clock"></i> Hora <small style="color:#94a3b8;">(6:00 AM - 7:00 PM)</small></label>
+                    <select id="selectHora" class="form-control">
+                        <option value="">-- Seleccione hora --</option>
+                        <option value="06:00">6:00 AM</option>
+                        <option value="07:00">7:00 AM</option>
+                        <option value="08:00">8:00 AM</option>
+                        <option value="08:30">8:30 AM</option>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="09:30">9:30 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="10:30">10:30 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="11:30">11:30 AM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="14:30">2:30 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="15:30">3:30 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                        <option value="16:30">4:30 PM</option>
+                        <option value="17:00">5:00 PM</option>
+                        <option value="17:30">5:30 PM</option>
+                        <option value="18:00">6:00 PM</option>
+                        <option value="19:00">7:00 PM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-comment-medical"></i> Motivo de consulta</label>
+                    <textarea id="inputMotivo" class="form-control" rows="3" placeholder="Describa brevemente el motivo de su consulta..."></textarea>
+                </div>
+                <div id="mensajeDisponibilidad" style="display:none; padding:10px; border-radius:8px; margin-top:8px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelarModal">Cancelar</button>
+                <button class="btn-primary" id="guardarCita"><i class="fas fa-save"></i> Solicitar Cita</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/paciente-citas.js"></script>
+</body>
+</html>

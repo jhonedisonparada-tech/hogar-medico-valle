@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incapacidades | Hogar Médico del Valle</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Unificado -->
+    <link rel="stylesheet" href="css/medico.css">
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="medico-dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="medico-paciente.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Mis Pacientes</span>
+            </a>
+            <a href="medico-citas.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Mis Citas</span>
+            </a>
+            <a href="medico-historias.html" class="nav-item">
+                <i class="fas fa-notes-medical"></i>
+                <span>Historias Clínicas</span>
+            </a>
+            <a href="medico-formulas.html" class="nav-item">
+                <i class="fas fa-prescription"></i>
+                <span>Fórmulas Médicas</span>
+            </a>
+            <a href="medico-incapacidades.html" class="nav-item active">
+                <i class="fas fa-file-medical"></i>
+                <span>Incapacidades</span>
+            </a>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Dr. Miguel Sánchez</span>
+                <span class="user-role">Médico</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-file-medical"></i>
+                Incapacidades
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+                <button class="btn-primary" id="nuevaIncapacidadBtn">
+                    <i class="fas fa-plus"></i> Nueva Incapacidad
+                </button>
+            </div>
+        </header>
+
+        <!-- BUSCADOR POR CÉDULA -->
+        <div class="buscador-container">
+            <div class="search-box-large">
+                <i class="fas fa-search"></i>
+                <input type="text" id="buscarDocumento" placeholder="Buscar paciente por número de cédula o documento..." autocomplete="off">
+                <button class="btn-primary" id="btnBuscar">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+            <div class="search-results" id="resultadosBusqueda" style="display: none;">
+                <!-- Resultados de búsqueda aparecen aquí -->
+            </div>
+        </div>
+
+        <!-- LISTA DE INCAPACIDADES (se muestra cuando se selecciona un paciente) -->
+        <div class="table-container" id="incapacidadesContainer" style="display: none;">
+            <div class="table-header">
+                <h3>
+                    <i class="fas fa-list"></i>
+                    Incapacidades de <span id="pacienteNombreSeleccionado"></span>
+                </h3>
+            </div>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Diagnóstico</th>
+                            <th>Días</th>
+                            <th>Periodo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="incapacidadesBody">
+                        <tr><td colspan="5" class="loading-message">Seleccione un paciente</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL PARA NUEVA INCAPACIDAD -->
+    <div class="modal" id="incapacidadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-medical"></i> Nueva Incapacidad</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="incapacidadForm">
+                    <!-- Campos ocultos -->
+                    <input type="hidden" id="pacienteId">
+                    
+                    <!-- Paciente -->
+                    <div class="form-group">
+                        <label>Paciente</label>
+                        <input type="text" id="pacienteNombreModal" class="form-control" readonly>
+                    </div>
+
+                    <!-- Documento -->
+                    <div class="form-group">
+                        <label>Documento</label>
+                        <input type="text" id="pacienteDocumentoModal" class="form-control" readonly>
+                    </div>
+
+                    <!-- Diagnóstico -->
+                    <div class="form-group">
+                        <label>Diagnóstico</label>
+                        <textarea id="diagnostico" rows="3" placeholder="Ej: Lumbalgia aguda, Fractura de tobillo, etc." required></textarea>
+                    </div>
+
+                    <!-- Días de incapacidad -->
+                    <div class="form-group">
+                        <label>Días de incapacidad</label>
+                        <input type="number" id="dias" min="1" placeholder="Ej: 15" required>
+                    </div>
+
+                    <!-- Fecha inicio -->
+                    <div class="form-group">
+                        <label>Fecha inicio <span class="formato-label">(dd/mm/aaaa)</span></label>
+                        <input type="date" id="fechaInicio" required>
+                    </div>
+
+                    <!-- Fecha fin -->
+                    <div class="form-group">
+                        <label>Fecha fin <span class="formato-label">(dd/mm/aaaa) - Se calcula automáticamente</span></label>
+                        <input type="date" id="fechaFin" class="form-control">
+                        <div class="info-ayuda">
+                            <i class="fas fa-info-circle"></i>
+                            Se calcula según días + fecha inicio. Puede modificarlo manualmente si es necesario.
+                        </div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea id="observaciones" rows="2" placeholder="Observaciones adicionales..."></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelarModal">Cancelar</button>
+                <button class="btn-primary" id="guardarIncapacidad">Generar Incapacidad</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/medico-incapacidades.js"></script>
+</body>
+</html>

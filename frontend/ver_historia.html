@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expediente Médico | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/historias.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="pacientes.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Pacientes</span>
+            </a>
+            <a href="medicos.html" class="nav-item">
+                <i class="fas fa-user-md"></i>
+                <span>Médicos</span>
+            </a>
+            <a href="citas.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Citas</span>
+            </a>
+            <a href="historia.html" class="nav-item active">
+                <i class="fas fa-notes-medical"></i>
+                <span>Historias</span>
+            </a>
+            <a href="configuracion.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Dr. Juan Pérez</span>
+                <span class="user-role" id="userRole">Administrador</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-notes-medical"></i>
+                Expediente Médico
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+            </div>
+        </header>
+
+        <a href="historia.html" style="display:inline-flex; align-items:center; gap:8px; background:#f1f5f9; color:#374151; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:600; margin-bottom:20px;">
+            <i class="fas fa-arrow-left"></i> Volver a Historias
+        </a>
+
+        <!-- INFO PACIENTE -->
+        <div class="table-container" style="border-left:5px solid #3498db; margin-bottom:20px;">
+            <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+                <div style="font-size:4rem; color:#3498db;">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div style="flex:1;">
+                    <h2 id="v_paciente" style="font-size:1.8rem; color:#2c3e50; margin-bottom:8px;">-</h2>
+                    <p style="color:#64748b;"><i class="fas fa-user-md" style="color:#3498db; margin-right:5px;"></i><span id="v_medico">-</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGNÓSTICO Y MOTIVO -->
+        <div class="table-container" style="margin-bottom:20px;">
+            <div class="table-header">
+                <h3><i class="fas fa-stethoscope"></i> Datos de la Consulta</h3>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                <div style="grid-column:1/-1;">
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Diagnóstico</label>
+                    <p id="v_diagnostico" style="color:#1e293b; padding:12px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Motivo de Consulta</label>
+                    <p id="v_motivo" style="color:#1e293b; padding:12px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Enfermedad Actual</label>
+                    <p id="v_enfermedad" style="color:#1e293b; padding:12px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXAMEN FÍSICO -->
+        <div class="table-container" style="margin-bottom:20px;">
+            <div class="table-header">
+                <h3><i class="fas fa-stethoscope"></i> Examen Físico</h3>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:15px;">
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Cabeza</label>
+                    <p id="v_cabeza" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">ORL</label>
+                    <p id="v_orl" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Cuello</label>
+                    <p id="v_cuello" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Cardiopulmonar</label>
+                    <p id="v_cardiopulmonar" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Abdomen</label>
+                    <p id="v_abdomen" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Genitourinario</label>
+                    <p id="v_genitourinario" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Extremidades</label>
+                    <p id="v_extremidades" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Sistema Nervioso Central</label>
+                    <p id="v_snc" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIGNOS VITALES -->
+        <div class="table-container" style="margin-bottom:20px;">
+            <div class="table-header">
+                <h3><i class="fas fa-heartbeat"></i> Signos Vitales</h3>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:15px;">
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Presión Arterial</label>
+                    <p id="v_presion" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Frec. Cardíaca</label>
+                    <p id="v_fcardiaca" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Frec. Respiratoria</label>
+                    <p id="v_frespiratoria" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Peso</label>
+                    <p id="v_peso" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Talla</label>
+                    <p id="v_talla" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">IMC</label>
+                    <p id="v_imc" style="color:#1e293b; padding:10px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANÁLISIS Y CONDUCTA -->
+        <div class="table-container" style="margin-bottom:20px;">
+            <div class="table-header">
+                <h3><i class="fas fa-clipboard-list"></i> Análisis y Conducta</h3>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Análisis</label>
+                    <p id="v_analisis" style="color:#1e293b; padding:12px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+                <div>
+                    <label style="font-weight:700; color:#64748b; font-size:0.85rem; text-transform:uppercase; display:block; margin-bottom:5px;">Conducta</label>
+                    <p id="v_conducta" style="color:#1e293b; padding:12px; background:#f8fafc; border-radius:8px;">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABS ANEXOS -->
+        <div class="table-container" style="margin-bottom:40px;">
+            <div class="table-header">
+                <h3><i class="fas fa-paperclip"></i> Anexos de la Historia Clínica</h3>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;">
+                <button class="tab-btn active" onclick="mostrarTab('ordenamientos', this)" style="padding:10px 20px; border-radius:8px; border:2px solid #e2e8f0; background:#3498db; color:#fff; cursor:pointer; font-size:0.9rem; font-weight:600;">
+                    <i class="fas fa-flask"></i> Paraclínicos y Órdenes
+                </button>
+                <button class="tab-btn" onclick="mostrarTab('medicamentos', this)" style="padding:10px 20px; border-radius:8px; border:2px solid #e2e8f0; background:#fff; color:#374151; cursor:pointer; font-size:0.9rem; font-weight:600;">
+                    <i class="fas fa-pills"></i> Medicamentos
+                </button>
+                <button class="tab-btn" onclick="mostrarTab('incapacidades', this)" style="padding:10px 20px; border-radius:8px; border:2px solid #e2e8f0; background:#fff; color:#374151; cursor:pointer; font-size:0.9rem; font-weight:600;">
+                    <i class="fas fa-file-medical"></i> Incapacidades
+                </button>
+            </div>
+
+            <!-- TAB ORDENAMIENTOS -->
+            <div id="tab_ordenamientos" class="tab-content-panel">
+                <form id="formOrdenamiento" style="margin-bottom:15px;">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div style="grid-column:1/-1;">
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Descripción:</label>
+                            <textarea id="ord_descripcion" rows="2" placeholder="Ej: Hemograma completo, Radiografía de tórax..." style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem; font-family:inherit; resize:vertical;"></textarea>
+                        </div>
+                        <div style="grid-column:1/-1;">
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Observaciones:</label>
+                            <textarea id="ord_observaciones" rows="2" placeholder="Observaciones adicionales" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem; font-family:inherit; resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-plus"></i> Agregar Ordenamiento
+                    </button>
+                </form>
+                <div class="table-responsive">
+                    <table id="tablaOrdenamientos">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Descripción</th><th>Observaciones</th><th>Fecha</th><th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB MEDICAMENTOS -->
+            <div id="tab_medicamentos" class="tab-content-panel" style="display:none;">
+                <form id="formMedicamento" style="margin-bottom:15px;">
+                    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Medicamento:</label>
+                            <input type="text" id="med_medicamento" placeholder="Nombre del medicamento" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div>
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Dosis:</label>
+                            <input type="text" id="med_dosis" placeholder="Ej: 500mg" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div>
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Frecuencia:</label>
+                            <input type="text" id="med_frecuencia" placeholder="Ej: Cada 8 horas" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div>
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Duración:</label>
+                            <input type="text" id="med_duracion" placeholder="Ej: 7 días" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div style="grid-column:1/-1;">
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Indicaciones:</label>
+                            <textarea id="med_indicaciones" rows="2" placeholder="Indicaciones especiales" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem; font-family:inherit; resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-plus"></i> Agregar Medicamento
+                    </button>
+                </form>
+                <div class="table-responsive">
+                    <table id="tablaMedicamentos">
+                        <thead>
+                            <tr>
+                                <th>Medicamento</th><th>Dosis</th><th>Frecuencia</th><th>Duración</th><th>Indicaciones</th><th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB INCAPACIDADES -->
+            <div id="tab_incapacidades" class="tab-content-panel" style="display:none;">
+                <form id="formIncapacidad" style="margin-bottom:15px;">
+                    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:12px;">
+                        <div style="grid-column:1/-1;">
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Diagnóstico:</label>
+                            <input type="text" id="inc_diagnostico" placeholder="Diagnóstico de la incapacidad" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div>
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Días de Incapacidad:</label>
+                            <input type="number" id="inc_dias" placeholder="Número de días" min="1" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div>
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Fecha Inicio:</label>
+                            <input type="date" id="inc_fecha_inicio" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div>
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Fecha Fin:</label>
+                            <input type="date" id="inc_fecha_fin" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem;">
+                        </div>
+                        <div style="grid-column:1/-1;">
+                            <label style="font-weight:600; color:#334155; display:block; margin-bottom:5px;">Observaciones:</label>
+                            <textarea id="inc_observaciones" rows="2" placeholder="Observaciones" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.95rem; font-family:inherit; resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-plus"></i> Agregar Incapacidad
+                    </button>
+                </form>
+                <div class="table-responsive">
+                    <table id="tablaIncapacidades">
+                        <thead>
+                            <tr>
+                                <th>Diagnóstico</th><th>Días</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Observaciones</th><th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="notificacion" style="position:fixed; top:22px; right:22px; padding:12px 18px; border-radius:8px; color:#fff; display:none; z-index:1000; font-size:14px; box-shadow:0 4px 12px rgba(0,0,0,0.15);"></div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = 'login.html';
+
+        const usuarioGuardado = localStorage.getItem('usuario');
+        if (usuarioGuardado) {
+            try {
+                const usuario = JSON.parse(usuarioGuardado);
+                document.getElementById('userName').textContent = usuario.nombre || 'Dr. Juan Pérez';
+                document.getElementById('userRole').textContent = usuario.rol || 'Administrador';
+            } catch(e) {}
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+
+        const fecha = new Date();
+        const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+        document.getElementById('fechaActual').textContent = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+
+        const params = new URLSearchParams(window.location.search);
+        const historiaId = params.get('id');
+        const pacienteId = params.get('paciente');
+        const medicoId = params.get('medico');
+
+        if (!historiaId) window.location.href = 'historia.html';
+
+        function val(v) { return v || '-'; }
+
+        function imcClase(imc) {
+            if (!imc) return '';
+            if (imc < 18.5) return 'background:#fef9c3; color:#ca8a04;';
+            if (imc < 25) return 'background:#f0fdf4; color:#16a34a;';
+            if (imc < 30) return 'background:#fff7ed; color:#ea580c;';
+            return 'background:#fef2f2; color:#dc2626;';
+        }
+
+        async function cargarHistoria() {
+            try {
+                const resp = await fetch(`${API_URL}/historias/${historiaId}`);
+                const json = await resp.json();
+                if (!json.success) return;
+                const h = json.data;
+
+                document.getElementById('v_diagnostico').textContent = val(h.diagnostico);
+                document.getElementById('v_motivo').textContent = val(h.motivo_consulta);
+                document.getElementById('v_enfermedad').textContent = val(h.enfermedad_actual);
+                document.getElementById('v_cabeza').textContent = val(h.examen_fisico_cabeza);
+                document.getElementById('v_orl').textContent = val(h.examen_fisico_orl);
+                document.getElementById('v_cuello').textContent = val(h.examen_fisico_cuello);
+                document.getElementById('v_cardiopulmonar').textContent = val(h.examen_fisico_cardiopulmonar);
+                document.getElementById('v_abdomen').textContent = val(h.examen_fisico_abdomen);
+                document.getElementById('v_genitourinario').textContent = val(h.examen_fisico_genitourinario);
+                document.getElementById('v_extremidades').textContent = val(h.examen_fisico_extremidades);
+                document.getElementById('v_snc').textContent = val(h.examen_fisico_snc);
+                document.getElementById('v_presion').textContent = val(h.presion_arterial);
+                document.getElementById('v_fcardiaca').textContent = h.frecuencia_cardiaca ? h.frecuencia_cardiaca + ' lat/min' : '-';
+                document.getElementById('v_frespiratoria').textContent = h.frecuencia_respiratoria ? h.frecuencia_respiratoria + ' resp/min' : '-';
+                document.getElementById('v_peso').textContent = h.peso ? h.peso + ' kg' : '-';
+                document.getElementById('v_talla').textContent = h.talla ? h.talla + ' cm' : '-';
+                document.getElementById('v_analisis').textContent = val(h.analisis);
+                document.getElementById('v_conducta').textContent = val(h.conducta);
+
+                if (h.imc) {
+                    document.getElementById('v_imc').innerHTML = `<span style="padding:4px 10px; border-radius:20px; font-weight:700; font-size:0.9rem; ${imcClase(h.imc)}">${h.imc}</span>`;
+                }
+
+                const rp = await fetch(`${API_URL}/pacientes/${h.paciente_id}`);
+                const jp = await rp.json();
+                if (jp.success) document.getElementById('v_paciente').textContent = jp.data.nombre;
+
+                const rm = await fetch(`${API_URL}/medicos/${h.medico_id}`);
+                const jm = await rm.json();
+                if (jm.success) document.getElementById('v_medico').textContent = jm.data.nombre;
+
+            } catch(e) { console.error('Error cargando historia:', e); }
+        }
+
+        async function cargarOrdenamientos() {
+            const resp = await fetch(`${API_URL}/ordenamientos?historia_id=${historiaId}`);
+            const json = await resp.json();
+            const tbody = document.querySelector('#tablaOrdenamientos tbody');
+            tbody.innerHTML = '';
+            if (!json.data || json.data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">No hay ordenamientos registrados</td></tr>`;
+                return;
+            }
+            json.data.forEach(o => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${o.id}</td>
+                    <td>${o.descripcion || '-'}</td>
+                    <td>${o.observaciones || '-'}</td>
+                    <td>${new Date(o.fecha).toLocaleDateString('es-CO')}</td>
+                    <td><button onclick="eliminar('ordenamientos', ${o.id}, cargarOrdenamientos)" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🗑</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function cargarMedicamentos() {
+            const resp = await fetch(`${API_URL}/medicamentos?historia_id=${historiaId}`);
+            const json = await resp.json();
+            const tbody = document.querySelector('#tablaMedicamentos tbody');
+            tbody.innerHTML = '';
+            if (!json.data || json.data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#9ca3af;">No hay medicamentos registrados</td></tr>`;
+                return;
+            }
+            json.data.forEach(m => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${m.medicamento}</td>
+                    <td>${m.dosis || '-'}</td>
+                    <td>${m.frecuencia || '-'}</td>
+                    <td>${m.duracion || '-'}</td>
+                    <td>${m.indicaciones || '-'}</td>
+                    <td><button onclick="eliminar('medicamentos', ${m.id}, cargarMedicamentos)" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🗑</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function cargarIncapacidades() {
+            const resp = await fetch(`${API_URL}/incapacidades?historia_id=${historiaId}`);
+            const json = await resp.json();
+            const tbody = document.querySelector('#tablaIncapacidades tbody');
+            tbody.innerHTML = '';
+            if (!json.data || json.data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#9ca3af;">No hay incapacidades registradas</td></tr>`;
+                return;
+            }
+            json.data.forEach(i => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${i.diagnostico || '-'}</td>
+                    <td>${i.dias_incapacidad} días</td>
+                    <td>${i.fecha_inicio ? new Date(i.fecha_inicio).toLocaleDateString('es-CO') : '-'}</td>
+                    <td>${i.fecha_fin ? new Date(i.fecha_fin).toLocaleDateString('es-CO') : '-'}</td>
+                    <td>${i.observaciones || '-'}</td>
+                    <td><button onclick="eliminar('incapacidades', ${i.id}, cargarIncapacidades)" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🗑</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function eliminar(ruta, id, recargar) {
+            if (!confirm('¿Está seguro de eliminar este registro?')) return;
+            const resp = await fetch(`${API_URL}/${ruta}/${id}`, { method: 'DELETE' });
+            const json = await resp.json();
+            if (json.success) { showNotification('Eliminado correctamente', true); recargar(); }
+            else showNotification('Error al eliminar', false);
+        }
+
+        document.getElementById('formOrdenamiento').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                paciente_id: pacienteId,
+                medico_id: medicoId,
+                historia_id: historiaId,
+                descripcion: document.getElementById('ord_descripcion').value,
+                observaciones: document.getElementById('ord_observaciones').value
+            };
+            const resp = await fetch(`${API_URL}/ordenamientos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const json = await resp.json();
+            if (json.success) { showNotification('Ordenamiento agregado', true); e.target.reset(); cargarOrdenamientos(); }
+            else showNotification('Error: ' + json.error, false);
+        });
+
+        document.getElementById('formMedicamento').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                paciente_id: pacienteId,
+                medico_id: medicoId,
+                historia_id: historiaId,
+                medicamento: document.getElementById('med_medicamento').value,
+                dosis: document.getElementById('med_dosis').value,
+                frecuencia: document.getElementById('med_frecuencia').value,
+                duracion: document.getElementById('med_duracion').value,
+                indicaciones: document.getElementById('med_indicaciones').value
+            };
+            const resp = await fetch(`${API_URL}/medicamentos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const json = await resp.json();
+            if (json.success) { showNotification('Medicamento agregado', true); e.target.reset(); cargarMedicamentos(); }
+            else showNotification('Error: ' + json.error, false);
+        });
+
+        document.getElementById('formIncapacidad').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                paciente_id: pacienteId,
+                medico_id: medicoId,
+                historia_id: historiaId,
+                diagnostico: document.getElementById('inc_diagnostico').value,
+                dias_incapacidad: document.getElementById('inc_dias').value,
+                fecha_inicio: document.getElementById('inc_fecha_inicio').value,
+                fecha_fin: document.getElementById('inc_fecha_fin').value,
+                observaciones: document.getElementById('inc_observaciones').value
+            };
+            const resp = await fetch(`${API_URL}/incapacidades`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const json = await resp.json();
+            if (json.success) { showNotification('Incapacidad agregada', true); e.target.reset(); cargarIncapacidades(); }
+            else showNotification('Error: ' + json.error, false);
+        });
+
+        function mostrarTab(tab, btn) {
+            document.querySelectorAll('.tab-content-panel').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.style.background = '#fff';
+                b.style.color = '#374151';
+            });
+            document.getElementById(`tab_${tab}`).style.display = 'block';
+            btn.style.background = '#3498db';
+            btn.style.color = '#fff';
+        }
+
+        function showNotification(msg, success) {
+            const n = document.getElementById('notificacion');
+            n.textContent = msg;
+            n.style.background = success ? '#16a34a' : '#dc2626';
+            n.style.display = 'block';
+            setTimeout(() => n.style.display = 'none', 3000);
+        }
+
+        cargarHistoria();
+        cargarOrdenamientos();
+        cargarMedicamentos();
+        cargarIncapacidades();
+    </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes | Hogar Médico del Valle</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/pacientes.css">
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="pacientes.html" class="nav-item active">
+                <i class="fas fa-users"></i>
+                <span>Pacientes</span>
+            </a>
+            <a href="medicos.html" class="nav-item">
+                <i class="fas fa-user-md"></i>
+                <span>Médicos</span>
+            </a>
+            <a href="citas.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Citas</span>
+            </a>
+            <a href="historias.html" class="nav-item">
+                <i class="fas fa-notes-medical"></i>
+                <span>Historias</span>
+            </a>
+            <a href="configuracion.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Dr. Juan Pérez</span>
+                <span class="user-role" id="userRole">Administrador</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <!-- ENCABEZADO -->
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-users"></i>
+                Gestión de Pacientes
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+                <button class="btn-primary" id="nuevoPacienteBtn">
+                    <i class="fas fa-plus"></i>
+                    Nuevo Paciente
+                </button>
+            </div>
+        </header>
+
+        <!-- FILTROS DE BÚSQUEDA -->
+        <div class="filters-container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="buscarPaciente" placeholder="Buscar por nombre, documento o teléfono...">
+            </div>
+            <div class="filter-options">
+                <select id="filtroEstado">
+                    <option value="todos">Todos los estados</option>
+                    <option value="activo">Activos</option>
+                    <option value="inactivo">Inactivos</option>
+                </select>
+                <button class="btn-secondary" id="limpiarFiltros">
+                    <i class="fas fa-eraser"></i>
+                    Limpiar
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLA DE PACIENTES -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>
+                    <i class="fas fa-list"></i>
+                    Listado de Pacientes
+                </h3>
+                <span class="table-count" id="totalPacientes">0 pacientes</span>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="pacientes-table">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre Completo</th>
+                            <th>Teléfono</th>
+                            <th>Email</th>
+                            <th>Fecha Nac.</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pacientesTableBody">
+                        <tr>
+                            <td colspan="7" class="loading-message">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Cargando pacientes...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL PARA NUEVO/EDITAR PACIENTE -->
+    <div class="modal" id="pacienteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nuevo Paciente</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="pacienteForm">
+                    <input type="hidden" id="pacienteId">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tipo Documento</label>
+                            <select id="tipoDocumento" required>
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                                <option value="TI">Tarjeta de Identidad</option>
+                                <option value="RC">Registro Civil</option>
+                                <option value="PA">Pasaporte</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>N° Documento</label>
+                            <input type="text" id="documento" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Primer Nombre</label>
+                            <input type="text" id="primerNombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Segundo Nombre</label>
+                            <input type="text" id="segundoNombre">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Primer Apellido</label>
+                            <input type="text" id="primerApellido" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Segundo Apellido</label>
+                            <input type="text" id="segundoApellido">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha Nacimiento</label>
+                            <input type="date" id="fechaNacimiento" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Género</label>
+                            <select id="genero" required>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                                <option value="O">Otro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="tel" id="telefono" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" id="direccion" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ciudad</label>
+                            <input type="text" id="ciudad" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select id="estado">
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelarModal">Cancelar</button>
+                <button class="btn-primary" id="guardarPaciente">Guardar Paciente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/pacientes.js"></script>
+</body>
+</html>

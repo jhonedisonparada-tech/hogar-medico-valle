@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Orden Paraclínica</title>
+    <link rel="stylesheet" href="css/medico.css">
+</head>
+<body>
+    <h1>Nueva Orden Paraclínica</h1>
+    <form id="formParaclinico">
+        <input type="hidden" id="pacienteId" value="">
+        <label>Examen / Procedimiento</label>
+        <input type="text" id="descripcion" required>
+        <label>Indicaciones</label>
+        <textarea id="observaciones"></textarea>
+        <button type="submit">Guardar</button>
+    </form>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById('pacienteId').value = urlParams.get('paciente');
+        document.getElementById('formParaclinico').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem('token');
+            const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+            if (!usuario.medico_id) { alert('Usuario no tiene médico asignado'); return; }
+            const response = await fetch('http://localhost:3000/api/ordenamientos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({
+                    paciente_id: document.getElementById('pacienteId').value,
+                    medico_id: usuario.medico_id,
+                    descripcion: document.getElementById('descripcion').value,
+                    observaciones: document.getElementById('observaciones').value
+                })
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert('Orden guardada');
+                window.location.href = `medico-historias.html?paciente=${document.getElementById('pacienteId').value}`;
+            } else {
+                alert('Error: ' + (data.message || 'Desconocido'));
+            }
+        });
+    </script>
+</body>
+</html>

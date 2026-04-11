@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas | Hogar Médico del Valle</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/citas.css">
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="pacientes.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Pacientes</span>
+            </a>
+            <a href="medicos.html" class="nav-item">
+                <i class="fas fa-user-md"></i>
+                <span>Médicos</span>
+            </a>
+            <a href="citas.html" class="nav-item active">
+                <i class="fas fa-calendar-check"></i>
+                <span>Citas</span>
+            </a>
+            <a href="historias.html" class="nav-item">
+                <i class="fas fa-notes-medical"></i>
+                <span>Historias</span>
+            </a>
+            <a href="configuracion.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Dr. Juan Pérez</span>
+                <span class="user-role" id="userRole">Administrador</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <!-- ENCABEZADO -->
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-calendar-check"></i>
+                Gestión de Citas
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+                <button class="btn-primary" id="nuevaCitaBtn">
+                    <i class="fas fa-plus"></i>
+                    Nueva Cita
+                </button>
+            </div>
+        </header>
+
+        <!-- FILTROS RÁPIDOS -->
+        <div class="quick-filters">
+            <button class="filter-btn active" data-filter="hoy">Hoy</button>
+            <button class="filter-btn" data-filter="manana">Mañana</button>
+            <button class="filter-btn" data-filter="semana">Esta Semana</button>
+            <button class="filter-btn" data-filter="pendientes">Pendientes</button>
+            <button class="filter-btn" data-filter="todas">Todas</button>
+        </div>
+
+        <!-- VISTA DE CALENDARIO Y LISTA -->
+        <div class="citas-view-container">
+            <!-- Selector de vista -->
+            <div class="view-selector">
+                <button class="view-btn active" id="btnCalendario">
+                    <i class="fas fa-calendar-alt"></i> Calendario
+                </button>
+                <button class="view-btn" id="btnLista">
+                    <i class="fas fa-list"></i> Lista
+                </button>
+            </div>
+
+            <!-- VISTA CALENDARIO -->
+            <div class="calendar-view" id="calendarView">
+                <div id="calendar"></div>
+            </div>
+
+            <!-- VISTA LISTA (oculta por defecto) -->
+            <div class="list-view" id="listView" style="display: none;">
+                <!-- FILTROS DE BÚSQUEDA -->
+                <div class="filters-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="buscarCita" placeholder="Buscar por paciente o médico...">
+                    </div>
+                    <div class="filter-options">
+                        <select id="filtroEstado">
+                            <option value="todos">Todos los estados</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="confirmada">Confirmada</option>
+                            <option value="completada">Completada</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                        <button class="btn-secondary" id="limpiarFiltros">
+                            <i class="fas fa-eraser"></i>
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TABLA DE CITAS -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-list"></i>
+                            Listado de Citas
+                        </h3>
+                        <span class="table-count" id="totalCitas">0 citas</span>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="citas-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Médico</th>
+                                    <th>Especialidad</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="citasTableBody">
+                                <tr>
+                                    <td colspan="7" class="loading-message">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Cargando citas...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL PARA NUEVA/EDITAR CITA -->
+    <div class="modal" id="citaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nueva Cita</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="citaForm">
+                    <input type="hidden" id="citaId">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Paciente <span class="required">*</span></label>
+                            <select id="pacienteId" required>
+                                <option value="">Seleccione un paciente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Médico <span class="required">*</span></label>
+                            <select id="medicoId" required>
+                                <option value="">Seleccione un médico</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha <span class="required">*</span></label>
+                            <input type="date" id="fecha" required min="">
+                        </div>
+                        <div class="form-group">
+                            <label>Hora <span class="required">*</span></label>
+                            <input type="time" id="hora" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Duración</label>
+                            <select id="duracion">
+                                <option value="30">30 minutos</option>
+                                <option value="45">45 minutos</option>
+                                <option value="60" selected>1 hora</option>
+                                <option value="90">1.5 horas</option>
+                                <option value="120">2 horas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Consulta</label>
+                            <select id="tipoConsulta">
+                                <option value="primera">Primera vez</option>
+                                <option value="control">Control</option>
+                                <option value="urgencia">Urgencia</option>
+                                <option value="procedimiento">Procedimiento</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Motivo de la consulta</label>
+                        <textarea id="motivo" rows="3" placeholder="Describa el motivo de la consulta..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea id="observaciones" rows="2" placeholder="Observaciones adicionales..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select id="estado">
+                                <option value="pendiente">Pendiente</option>
+                                <option value="confirmada">Confirmada</option>
+                                <option value="completada">Completada</option>
+                                <option value="cancelada">Cancelada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Recordatorio</label>
+                            <select id="recordatorio">
+                                <option value="0">Sin recordatorio</option>
+                                <option value="15">15 minutos antes</option>
+                                <option value="30">30 minutos antes</option>
+                                <option value="60">1 hora antes</option>
+                                <option value="120">2 horas antes</option>
+                                <option value="1440">1 día antes</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelarModal">Cancelar</button>
+                <button class="btn-primary" id="guardarCita">Guardar Cita</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA VER DETALLE DE CITA -->
+    <div class="modal" id="detalleCitaModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3>Detalle de Cita</h3>
+                <button class="modal-close" id="closeDetalleModal">&times;</button>
+            </div>
+            <div class="modal-body" id="detalleCitaBody">
+                <!-- Se llena con JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cerrarDetalle">Cerrar</button>
+                <button class="btn-primary" id="editarDesdeDetalle">Editar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    <script src="js/citas.js"></script>
+</body>
+</html>

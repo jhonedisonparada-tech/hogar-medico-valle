@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portal | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/paciente.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text"><strong>Hogar Médico</strong> del Valle</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="paciente-dashboard.html" class="nav-item active"><i class="fas fa-home"></i><span>Inicio</span></a>
+            <a href="paciente-citas.html" class="nav-item"><i class="fas fa-calendar-check"></i><span>Mis Citas</span></a>
+            <a href="paciente-historia.html" class="nav-item"><i class="fas fa-notes-medical"></i><span>Mi Historia</span></a>
+            <a href="paciente-incapacidades.html" class="nav-item"><i class="fas fa-file-medical"></i><span>Incapacidades</span></a>
+            <a href="paciente-formulas.html" class="nav-item"><i class="fas fa-pills"></i><span>Fórmulas</span></a>
+            <a href="paciente-examenes.html" class="nav-item"><i class="fas fa-flask"></i><span>Exámenes</span></a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Paciente</span>
+                <span class="user-role">Paciente</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title"><i class="fas fa-home"></i> Mi Panel</h1>
+            <div class="header-actions">
+                <div class="date-display"><i class="far fa-calendar-alt"></i> <span id="fechaActual"></span></div>
+            </div>
+        </header>
+
+        <!-- TARJETAS DE RESUMEN -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#3498db,#2980b9)">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Próximas Citas</p>
+                    <h2 class="stat-number" id="totalCitas">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#27ae60,#219a52)">
+                    <i class="fas fa-notes-medical"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Historias Clínicas</p>
+                    <h2 class="stat-number" id="totalHistorias">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#e67e22,#d35400)">
+                    <i class="fas fa-file-medical"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Incapacidades</p>
+                    <h2 class="stat-number" id="totalIncapacidades">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#9b59b6,#8e44ad)">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Fórmulas</p>
+                    <h2 class="stat-number" id="totalFormulas">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRÓXIMAS CITAS -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-calendar-check"></i> Mis Próximas Citas</h3>
+                <a href="paciente-citas.html" class="btn-ver-todas">Ver todas →</a>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Médico</th>
+                            <th>Especialidad</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proximasCitasBody">
+                        <tr><td colspan="5" class="loading-msg"><i class="fas fa-spinner fa-spin"></i> Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ÚLTIMAS CONSULTAS -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-notes-medical"></i> Últimas Consultas</h3>
+                <a href="paciente-historia.html" class="btn-ver-todas">Ver historial →</a>
+            </div>
+            <div id="ultimasConsultas">
+                <p class="loading-msg"><i class="fas fa-spinner fa-spin"></i> Cargando...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/paciente-dashboard.js"></script>
+</body>
+</html>

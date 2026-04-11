@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atender Paciente | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; display: flex; }
+        .sidebar { width: 280px; background: linear-gradient(180deg, #1a2634, #2c3e50); color: white; height: 100vh; position: fixed; }
+        .logo-container { padding: 25px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { width: 50px; height: 50px; object-fit: contain; }
+        .logo-text strong { display: block; font-size: 1.2rem; }
+        .nav-menu { padding: 20px 0; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: rgba(255,255,255,0.7); text-decoration: none; margin: 4px 12px; border-radius: 8px; }
+        .nav-item.active, .nav-item:hover { background: rgba(255,255,255,0.15); color: white; }
+        .user-info { padding: 20px; display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.1); position: absolute; bottom: 0; width: 100%; }
+        .user-avatar { font-size: 2.5rem; }
+        .user-name { font-weight: 600; }
+        .user-role { font-size: 0.7rem; background: rgba(52,152,219,0.3); padding: 3px 8px; border-radius: 4px; }
+        .logout-btn { background: rgba(255,255,255,0.1); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
+        .main-content { margin-left: 280px; padding: 25px; width: calc(100% - 280px); }
+        .header-bar { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .btn-back { background: #e2e8f0; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background: #3498db; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .paciente-info { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .info-item { background: #f8fafc; padding: 10px 15px; border-radius: 8px; }
+        .info-label { font-size: 0.85rem; color: #64748b; display: block; }
+        .info-value { font-size: 1.1rem; font-weight: 600; color: #1e293b; }
+        .medico-info { background: #f0f9ff; border-left: 4px solid #3498db; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .section-title { color: #2c3e50; font-size: 1.2rem; font-weight: 700; margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 3px solid #3498db; display: flex; align-items: center; gap: 10px; }
+        .section-title i { color: #3498db; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #334155; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.95rem; font-family: inherit; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52,152,219,0.1); }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        @media (max-width: 768px) { .grid-4, .grid-3 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Logo" class="logo">
+            <div class="logo-text"><strong>Hogar Médico</strong> del Valle</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="medico-dashboard.html" class="nav-item"><i class="fas fa-home"></i> Inicio</a>
+            <a href="medico-paciente.html" class="nav-item"><i class="fas fa-users"></i> Mis Pacientes</a>
+            <a href="medico-citas.html" class="nav-item"><i class="fas fa-calendar-check"></i> Mis Citas</a>
+            <a href="medico-historias.html" class="nav-item active"><i class="fas fa-notes-medical"></i> Historia Clínica</a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+            <div>
+                <div class="user-name" id="userName">Dr. Miguel Sánchez</div>
+                <div class="user-role">Médico</div>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+    <main class="main-content">
+        <div class="header-bar">
+            <button class="btn-back" onclick="history.back()"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h1>Atención al Paciente</h1>
+            <button class="btn-primary" id="guardarConsultaBtn"><i class="fas fa-save"></i> Guardar Consulta</button>
+        </div>
+        <div class="paciente-info">
+            <h2 id="pacienteNombre">Cargando paciente...</h2>
+            <div class="info-grid">
+                <div class="info-item"><span class="info-label">Documento</span><span class="info-value" id="pacienteDocumento">-</span></div>
+                <div class="info-item"><span class="info-label">Edad</span><span class="info-value" id="pacienteEdad">-</span></div>
+                <div class="info-item"><span class="info-label">Género</span><span class="info-value" id="pacienteGenero">-</span></div>
+                <div class="info-item"><span class="info-label">Teléfono</span><span class="info-value" id="pacienteTelefono">-</span></div>
+                <div class="info-item"><span class="info-label">Email</span><span class="info-value" id="pacienteEmail">-</span></div>
+            </div>
+        </div>
+        <div class="medico-info">
+            <i class="fas fa-user-md" style="color:#3498db; font-size:1.5rem;"></i>
+            <div><strong>Médico:</strong> <span id="medicoNombre">Dr. Miguel Sánchez</span> <span style="color:#64748b;">(usuario actual)</span></div>
+        </div>
+        <form id="atencionForm">
+            <div class="section-title"><i class="fas fa-diagnoses"></i> Diagnóstico</div>
+            <div class="form-group"><textarea id="diagnostico" rows="2" placeholder="Diagnóstico principal..." required></textarea></div>
+            <div class="section-title"><i class="fas fa-question-circle"></i> Motivo de consulta</div>
+            <div class="form-group"><textarea id="motivoConsulta" rows="2" placeholder="Ej: Dolor de cabeza, control, etc." required></textarea></div>
+            <div class="section-title"><i class="fas fa-clock"></i> Enfermedad actual</div>
+            <div class="form-group"><textarea id="enfermedadActual" rows="3" placeholder="Describa la evolución..."></textarea></div>
+            <div class="section-title"><i class="fas fa-stethoscope"></i> Examen físico</div>
+            <div class="grid-4">
+                <div class="form-group"><label>Cabeza</label><input type="text" id="examenCabeza" placeholder="Normal / Hallazgos"></div>
+                <div class="form-group"><label>ORL</label><input type="text" id="examenOrl" placeholder="Oídos, nariz, garganta"></div>
+                <div class="form-group"><label>Cuello</label><input type="text" id="examenCuello" placeholder="Normal / Hallazgos"></div>
+                <div class="form-group"><label>Cardiopulmonar</label><input type="text" id="examenCardiopulmonar" placeholder="Corazón y pulmones"></div>
+                <div class="form-group"><label>Abdomen</label><input type="text" id="examenAbdomen" placeholder="Normal / Hallazgos"></div>
+                <div class="form-group"><label>Genitourinario</label><input type="text" id="examenGenitourinario" placeholder="Normal / Hallazgos"></div>
+                <div class="form-group"><label>Extremidades</label><input type="text" id="examenExtremidades" placeholder="Normal / Hallazgos"></div>
+                <div class="form-group"><label>Sistema nervioso central</label><input type="text" id="examenSnc" placeholder="Normal / Hallazgos"></div>
+            </div>
+            <div class="section-title"><i class="fas fa-heartbeat"></i> Signos vitales</div>
+            <div class="grid-3">
+                <div class="form-group"><label>Presión arterial (mmHg)</label><input type="text" id="signosPa" placeholder="Ej: 120/80"></div>
+                <div class="form-group"><label>Frecuencia cardiaca (lpm)</label><input type="number" id="signosFc" placeholder="Ej: 72"></div>
+                <div class="form-group"><label>Frecuencia respiratoria (rpm)</label><input type="number" id="signosFr" placeholder="Ej: 16"></div>
+                <div class="form-group"><label>Peso (kg)</label><input type="number" step="0.1" id="signosPeso" placeholder="Ej: 70"></div>
+                <div class="form-group"><label>Talla (cm)</label><input type="number" step="0.1" id="signosTalla" placeholder="Ej: 170"></div>
+                <div class="form-group"><label>IMC</label><input type="text" id="signosImc" readonly placeholder="Se calcula"></div>
+            </div>
+            <div class="section-title"><i class="fas fa-flask"></i> Análisis</div>
+            <div class="form-group"><textarea id="analisis" rows="3" placeholder="Análisis..."></textarea></div>
+            <div class="section-title"><i class="fas fa-clipboard-list"></i> Conducta</div>
+            <div class="form-group"><textarea id="conducta" rows="3" placeholder="Conducta a seguir..."></textarea></div>
+        </form>
+    </main>
+    <script src="js/atender-paciente.js"></script>
+</body>
+</html>

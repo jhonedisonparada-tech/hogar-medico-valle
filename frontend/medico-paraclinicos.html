@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paraclínicos | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/medico.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text"><strong>Hogar Médico</strong> del Valle</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="medico-dashboard.html" class="nav-item"><i class="fas fa-home"></i> Inicio</a>
+            <a href="medico-paciente.html" class="nav-item"><i class="fas fa-users"></i> Mis Pacientes</a>
+            <a href="medico-citas.html" class="nav-item"><i class="fas fa-calendar-check"></i> Mis Citas</a>
+            <a href="medico-historias.html" class="nav-item"><i class="fas fa-notes-medical"></i> Historia Clínica</a>
+            <a href="medico-formulas.html" class="nav-item"><i class="fas fa-pills"></i> Medicamentos</a>
+            <a href="medico-paraclinicos.html" class="nav-item active"><i class="fas fa-flask"></i> Paraclínicos</a>
+            <a href="medico-incapacidades.html" class="nav-item"><i class="fas fa-file-medical"></i> Incapacidades</a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+            <div>
+                <span class="user-name" id="userName">Dr. Miguel Sánchez</span>
+                <span class="user-role">Médico</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title"><i class="fas fa-flask"></i> Paraclínicos</h1>
+            <div class="header-actions">
+                <div class="date-display"><i class="far fa-calendar-alt"></i> <span id="fechaActual"></span></div>
+                <button class="btn-primary" id="nuevoParaclinicoBtn"><i class="fas fa-plus"></i> Nueva Orden</button>
+            </div>
+        </header>
+        <div class="buscador-container">
+            <div class="search-box-large">
+                <i class="fas fa-search"></i>
+                <input type="text" id="buscarDocumento" placeholder="Buscar paciente por cédula...">
+                <button class="btn-primary" id="btnBuscar"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+            <div class="search-results" id="resultadosBusqueda"></div>
+        </div>
+        <div class="table-container" id="paraclinicosContainer" style="display:none;">
+            <div class="table-header">
+                <h3><i class="fas fa-list"></i> Órdenes de <span id="pacienteNombreSeleccionado"></span></h3>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>Fecha</th><th>Examen/Procedimiento</th><th>Indicaciones</th><th>Estado</th><th>Resultado</th><th>Acciones</th></tr></thead>
+                    <tbody id="paraclinicosBody"><tr><td colspan="6" class="loading-message">Seleccione un paciente</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <!-- Modal Nueva Orden Paraclínica -->
+    <div class="modal" id="paraclinicoModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-flask"></i> Nueva Orden Paraclínica</h3><button class="modal-close" id="closeModal">&times;</button></div>
+            <div class="modal-body">
+                <form id="paraclinicoForm">
+                    <input type="hidden" id="pacienteId">
+                    <div class="form-group"><label>Paciente</label><input type="text" id="pacienteNombreModal" class="form-control" readonly></div>
+                    <div class="form-group"><label>Documento</label><input type="text" id="pacienteDocumentoModal" class="form-control" readonly></div>
+                    <div class="form-group"><label>Examen / Procedimiento</label><input type="text" id="examen" placeholder="Ej: Hemograma, Radiografía de tórax" required></div>
+                    <div class="form-group"><label>Indicaciones</label><textarea id="indicaciones" rows="3" placeholder="Ayuno, preparación, etc."></textarea></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelarModal">Cancelar</button>
+                <button class="btn-primary" id="guardarParaclinico">Guardar Orden</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/medico-paraclinicos.js"></script>
+</body>
+</html>
