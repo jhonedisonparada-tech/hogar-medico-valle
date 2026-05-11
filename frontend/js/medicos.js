@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Medicos.js cargado correctamente');
 
-    const API_URL = 'http://localhost:3000/api';
+    const API_BASE_URL = 'http://localhost:5000/api';
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarEspecialidades() {
         try {
-            const response = await fetch(`${API_URL}/medicos/especialidades/lista`);
-                const data = await fetch(`${API_URL}/medicos/especialidades/lista`, {
+            const response = await fetch(`${API_BASE_URL}/medicos/especialidades/lista`);
+                const data = await fetch(`${API_BASE_URL}/medicos/especialidades/lista`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 }).then(res => res.json());
             if (data.success) {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </tr>
                 `;
             }
-                const response = await fetch(`${API_URL}/medicos`, {
+                const response = await fetch(`${API_BASE_URL}/medicos`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
             const data = await response.json();
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             const medicoId = document.getElementById('medicoId').value;
-            const url = medicoId ? `${API_URL}/medicos/${medicoId}` : `${API_URL}/medicos`;
+            const url = medicoId ? `${API_BASE_URL}/medicos/${medicoId}` : `${API_BASE_URL}/medicos`;
             const method = medicoId ? 'PUT' : 'POST';
 
                 const response = await fetch(url, {
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.eliminarMedico = async function(id) {
         if (confirm('¿Está seguro de eliminar este médico?')) {
             try {
-                    const response = await fetch(`${API_URL}/medicos/${id}`, {
+                    const response = await fetch(`${API_BASE_URL}/medicos/${id}`, {
                         method: 'DELETE',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });

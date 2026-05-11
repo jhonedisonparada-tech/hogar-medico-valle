@@ -27,6 +27,13 @@ exports.obtenerTodasHistorias = async (req, res) => {
 exports.obtenerHistoriasPorPaciente = async (req, res) => {
     try {
         const { pacienteId } = req.params;
+        const usuario = req.usuario;
+
+        // Si es Paciente, solo puede ver sus propias historias
+        if (usuario.rol === 'Paciente' && usuario.paciente_id != pacienteId) {
+            return res.status(403).json({ success: false, message: 'No autorizado.' });
+        }
+
         const [rows] = await pool.query(`
             SELECT h.*,
                    p.nombre AS paciente_nombre,
@@ -61,6 +68,11 @@ exports.obtenerHistoriaPorId = async (req, res) => {
         `, [id]);
         if (rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Historia no encontrada' });
+        }
+        // Si es Paciente, verificar que sea suya
+        const usuario = req.usuario;
+        if (usuario.rol === 'Paciente' && usuario.paciente_id != rows[0].paciente_id) {
+            return res.status(403).json({ success: false, message: 'No autorizado.' });
         }
         res.json({ success: true, data: rows[0] });
     } catch (error) {
@@ -139,11 +151,45 @@ exports.crearHistoria = async (req, res) => {
 };
 
 // ============================================
-// ACTUALIZAR HISTORIA (solo médicos)
+// ACTUALIZAR HISTORIA (solo médicos, con restricción de 48h y estado)
 // ============================================
 exports.actualizarHistoria = async (req, res) => {
     try {
         const { id } = req.params;
+        
+        // 1. Obtener la historia actual para verificar su fecha de creación y posible estado
+        const [historiaRows] = await pool.query(
+            `SELECT created_at, COALESCE(estado, 'Abierta') as estado 
+             FROM historias_clinicas WHERE id = ?`,
+            [id]
+        );
+        
+        if (historiaRows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Historia no encontrada' });
+        }
+        
+        const historia = historiaRows[0];
+        const createdAt = new Date(historia.created_at);
+        const ahora = new Date();
+        const diferenciaHoras = (ahora - createdAt) / (1000 * 60 * 60);
+        
+        // Validación por tiempo
+        if (diferenciaHoras > 48) {
+            return res.status(403).json({
+                success: false,
+                message: 'No se puede modificar una historia clínica después de 48 horas de su creación.'
+            });
+        }
+        
+        // Validación por estado (si existe el campo)
+        if (historia.estado === 'Cerrada') {
+            return res.status(403).json({
+                success: false,
+                message: 'No se puede modificar una historia clínica que ya ha sido cerrada.'
+            });
+        }
+        
+        // 2. Proceder con la actualización
         const {
             motivo_consulta, sintomas, diagnostico, tratamiento, observaciones,
             presion_arterial, temperatura, peso, altura, frecuencia_cardiaca,

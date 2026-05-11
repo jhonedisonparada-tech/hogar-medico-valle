@@ -480,46 +480,46 @@ tbody tr:hover td { background: var(--gray-50); }
 
 .modal-content {
     background: white;
-    border-radius: 20px;
+    border-radius: var(--border-radius);
     width: 90%;
     max-width: 540px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    box-shadow: var(--shadow-lg);
 }
 
 .modal-header {
-    padding: 24px 28px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 22px 26px;
+    border-bottom: 1px solid var(--gray-200);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #1a2634, #2c3e50);
-    border-radius: 20px 20px 0 0;
+    background: var(--gray-50);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .modal-header h3 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: white;
+    color: var(--gray-800);
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.modal-header h3 i { color: #3498db; }
+.modal-header h3 i { color: var(--secondary); }
 
 .modal-close {
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: rgba(255,255,255,0.7);
+    color: var(--gray-500);
     transition: var(--transition);
     line-height: 1;
 }
 
-.modal-close:hover { color: white; }
+.modal-close:hover { color: var(--danger); }
 
 .modal-body { padding: 26px; }
 
@@ -530,7 +530,7 @@ tbody tr:hover td { background: var(--gray-50); }
     justify-content: flex-end;
     gap: 12px;
     background: var(--gray-50);
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 /* ============================================ */
@@ -539,36 +539,35 @@ tbody tr:hover td { background: var(--gray-50); }
 .form-group { margin-bottom: 18px; }
 
 .form-group label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    display: block;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--gray-700);
     margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .form-control {
     width: 100%;
-    padding: 12px 16px;
+    padding: 11px 15px;
     border: 2px solid var(--gray-200);
-    border-radius: 12px;
-    font-size: 0.92rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
     color: var(--gray-800);
-    transition: border 0.2s, box-shadow 0.2s;
+    transition: border 0.2s;
     font-family: 'Inter', sans-serif;
-    background: #f8fafc;
+    background: var(--white);
 }
 
 .form-control:focus {
     outline: none;
     border-color: var(--secondary);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(52,152,219,0.1);
+    box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
 }
 
 textarea.form-control { resize: vertical; min-height: 90px; }
-
 /* INFO PACIENTE */
 .paciente-info-grid {
     display: grid;
@@ -628,9 +627,13 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     margin-top: 3px;
 }
 
-.historia-card-body { padding: 16px 20px; }
+.historia-card-body {
+    padding: 16px 20px;
+}
 
-.historia-field { margin-bottom: 12px; }
+.historia-field {
+    margin-bottom: 12px;
+}
 
 .historia-field-label {
     font-size: 0.78rem;
@@ -689,7 +692,6 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 }
 
 .btn-descargar:hover { background: #219a52; }
-
 /* NOTIFICACIONES TOAST */
 .toast {
     position: fixed;
@@ -716,4 +718,183 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 @keyframes slideIn {
     from { transform: translateX(100px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
+}
+.btn-confirmar {
+    background: linear-gradient(135deg, #27ae60, #219a52);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition);
+}
+
+.btn-confirmar:hover { opacity: 0.85; }
+/* Badges de estado para citas */
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-confirmada {
+    background: #d4edda;
+    color: #155724;
+}
+
+.badge-pendiente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badge-programada {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.badge-completada {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.badge-cancelada {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Botón confirmar pequeño */
+.btn-confirmar {
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.btn-confirmar:hover {
+    background: #219a52;
+    transform: translateY(-1px);
+}
+/* Botones de acción en tabla de pacientes */
+.btn-accion-ver {
+    background: transparent;
+    color: #3498db;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.btn-accion-ver:hover {
+    background: #3498db;
+    color: white;
+}
+
+.btn-accion-editar {
+    background: transparent;
+    color: #e67e22;
+    border: 2px solid #e67e22;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.btn-accion-editar:hover {
+    background: #e67e22;
+    color: white;
+}
+
+/* Ajuste para columna de acciones */
+td .btn-accion-ver,
+td .btn-accion-editar {
+    white-space: nowrap;
+}
+/* MODAL MODERNO */
+.modal-content {
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #1a2634, #2c3e50);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 28px;
+    border-bottom: none;
+}
+
+.modal-header h3 { color: white; font-size: 1.15rem; }
+.modal-header h3 i { color: #3498db; }
+.modal-close { color: rgba(255,255,255,0.7); font-size: 1.6rem; }
+.modal-close:hover { color: white; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 2px 6px; }
+
+.modal-body { padding: 28px; }
+
+.modal-footer {
+    background: #f8fafc;
+    border-radius: 0 0 20px 20px;
+    padding: 20px 28px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.form-control, .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    color: #1e293b;
+    background: #f8fafc;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-control:focus, .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(52,152,219,0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 5px;
 }

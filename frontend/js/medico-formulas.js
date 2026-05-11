@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-const API_URL = 'http://localhost:3000/api';
+
 let pacienteActual = null;
 
 function mostrarFecha() {
@@ -54,7 +54,7 @@ async function buscarPaciente() {
     const resultadosDiv = document.getElementById('resultadosBusqueda');
     
     try {
-        const response = await fetch(`${API_URL}/pacientes`, {
+        const response = await fetch(`${API_BASE_URL}/pacientes`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         
@@ -91,7 +91,7 @@ async function buscarPaciente() {
 
 async function cargarPacientePorId(pacienteId) {
     try {
-        const response = await fetch(`${API_URL}/pacientes/${pacienteId}`, {
+        const response = await fetch(`${API_BASE_URL}/pacientes/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         
@@ -120,7 +120,7 @@ async function cargarFormulas(pacienteId) {
     const tbody = document.getElementById('formulasBody');
     
     try {
-        const response = await fetch(`${API_URL}/medico/formulas/${pacienteId}`, {
+        const response = await fetch(`${API_BASE_URL}/medico/formulas/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         
@@ -246,7 +246,7 @@ async function guardarFormula() {
     };
 
     try {
-        const response = await fetch(`${API_URL}/medico/formulas`, {
+        const response = await fetch(`${API_BASE_URL}/medico/formulas`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

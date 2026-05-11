@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-const API_URL = 'http://localhost:3000/api';
+
 
 // Helper: fetch con token
 function apiFetch(endpoint) {
     const token = localStorage.getItem('token');
-    return fetch(`${API_URL}${endpoint}`, {
+    return fetch(`${API_BASE_URL}${endpoint}`, {
         headers: { 'Authorization': `Bearer ${token}` }
     });
 }
@@ -154,10 +154,10 @@ async function cargarPacientes() {
 
         if (data.data && data.data.length > 0) {
             tbody.innerHTML = data.data.slice(0, 5).map(p => {
-                const fecha = p.fecha_nacimiento
-                    ? new Date(p.fecha_nacimiento).toLocaleDateString('es-ES')
-                    : '-';
-                return `
+                const fecha = p.created_at
+                ? new Date(p.created_at).toLocaleDateString('es-ES')
+                    : '-';                
+                    return `
                     <tr>
                         <td><strong>${p.nombre || ''}</strong></td>
                         <td>${p.documento || ''}</td>
@@ -165,8 +165,8 @@ async function cargarPacientes() {
                         <td>${p.email || '-'}</td>
                         <td>${fecha}</td>
                         <td>
-                            <button class="action-btn" onclick="verPaciente(${p.id})" title="Ver">
-                                <i class="fas fa-eye"></i>
+                            <button class="btn-editar" onclick="verPaciente(${p.id})">
+                            <i class="fas fa-eye"></i> Ver
                             </button>
                         </td>
                     </tr>`;

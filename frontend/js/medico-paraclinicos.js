@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.clear(); window.location.href='login.html'; });
 });
 
-const API_URL = 'http://localhost:3000/api';
+;
 let pacienteActual = null;
 
 function mostrarFecha() {
@@ -29,7 +29,7 @@ async function buscarPaciente() {
     resultados.style.display = 'block';
     resultados.innerHTML = '<div class="loading-message"><i class="fas fa-spinner fa-spin"></i> Buscando...</div>';
     try {
-        const response = await fetch(`${API_URL}/pacientes`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+        const response = await fetch(`${API_BASE_URL}/pacientes`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
         if (response.status === 401) {
             resultados.innerHTML = '<div class="paciente-resultado">Sesión expirada. Inicie sesión de nuevo.</div>';
             setTimeout(() => { window.location.href = 'login.html'; }, 1500);
@@ -71,7 +71,7 @@ window.seleccionarPaciente = function(id, nombre, doc) {
 async function cargarOrdenes(pacienteId) {
     const tbody = document.getElementById('paraclinicosBody');
     try {
-        const response = await fetch(`${API_URL}/ordenamientos/paciente/${pacienteId}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+        const response = await fetch(`${API_BASE_URL}/ordenamientos/paciente/${pacienteId}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
         const data = await response.json();
         if (data.data && data.data.length) {
             tbody.innerHTML = data.data.map(o => `
@@ -117,7 +117,7 @@ async function guardarOrden() {
         fecha: new Date().toISOString().split('T')[0]
     };
     try {
-        const response = await fetch(`${API_URL}/ordenamientos`, {
+        const response = await fetch(`${API_BASE_URL}/ordenamientos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: JSON.stringify(orden)

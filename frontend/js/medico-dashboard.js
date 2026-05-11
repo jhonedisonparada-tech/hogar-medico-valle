@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-const API_URL = 'http://localhost:3000/api';
 
 async function cargarDatos() {
     try {
@@ -58,14 +57,14 @@ function mostrarFecha() {
 
 async function cargarTodo() {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
-    const medicoId = usuario.medico_id;
+    const medicoId = usuario.medico_id || usuario.id;
     const token = localStorage.getItem('token');
 
     if (!medicoId) return;
 
     try {
         // 1. Obtener todas las citas del médico
-        const citasRes = await fetch(`${API_URL}/citas/medico/${medicoId}`, {
+        const citasRes = await fetch(`${API_BASE_URL}/citas/medico/${medicoId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!citasRes.ok) throw new Error('Error al obtener citas');
@@ -73,34 +72,39 @@ async function cargarTodo() {
         const todasLasCitas = citasData.data || [];
 
         // 2. Obtener todas las historias del médico
-        const historiasRes = await fetch(`${API_URL}/historias/medico/${medicoId}`, {
+        const historiasRes = await fetch(`${API_BASE_URL}/historias/medico/${medicoId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!historiasRes.ok) throw new Error('Error al obtener historias');
         const historiasData = await historiasRes.json();
         const todasLasHistorias = historiasData.data || [];
 
-        // 3. Procesar estadísticas
+// 3. Procesar estadísticas
         const hoy = new Date().toISOString().split('T')[0];
-        const citasHoy = todasLasCitas.filter(c => c.fecha.split('T')[0] === hoy);
-        const proximas = todasLasCitas.filter(c => c.fecha.split('T')[0] >= hoy);
+        const citasHoy = todasLasCitas.filter(c => {
+            const fechaCita = new Date(c.fecha).toISOString().split('T')[0];
+            return fechaCita === hoy;
+        });
+        const proximas = todasLasCitas.filter(c => {
+            const fechaCita = new Date(c.fecha).toISOString().split('T')[0];
+            return fechaCita >= hoy;
+        });
 
         document.getElementById('citasHoy').textContent = citasHoy.length;
         document.getElementById('proximasCitas').textContent = proximas.length;
 
         const pacientesSet = new Set();
-        todasLasHistorias.forEach(h => {
-            if (h.paciente_id) pacientesSet.add(h.paciente_id);
+        todasLasHistorias.forEach(c => {
+            if (c.paciente_id) pacientesSet.add(c.paciente_id);
         });
         document.getElementById('totalPacientes').textContent = pacientesSet.size;
         document.getElementById('totalHistorias').textContent = todasLasHistorias.length;
-
         // 4. Mostrar TODAS las citas en la tabla (sin filtrar por fecha)
         const tbody = document.getElementById('citasHoyBody');
         if (!tbody) return;
 
-        if (todasLasCitas.length > 0) {
-            tbody.innerHTML = todasLasCitas.map(c => `
+if (citasHoy.length > 0) {
+    tbody.innerHTML = citasHoy.map(c => `
                 <tr>
                     <td><strong>${c.hora?.substring(0,5) || '--:--'}</strong></td>
                     <td>${c.paciente_nombre || 'Paciente'}</td>
@@ -119,7 +123,7 @@ async function cargarTodo() {
         }
 
     } catch (error) {
-        console.error('❌ Error en cargarTodo:', error);
+        console.error('Error detalle:', error.message);
         // Datos de ejemplo por si falla
         document.getElementById('citasHoy').textContent = '3';
         document.getElementById('totalPacientes').textContent = '5';

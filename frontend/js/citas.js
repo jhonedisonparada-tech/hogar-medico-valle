@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Citas.js cargado correctamente');
 
-    const API_URL = 'http://localhost:3000/api';
+    const API_BASE_URL = 'http://localhost:5000/api';
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarPacientes() {
         try {
-            const response = await fetchConAuth(`${API_URL}/pacientes`);
+            const response = await fetchConAuth(`${API_BASE_URL}/pacientes`);
             const data = await response.json();
             if (data.success) {
                 pacientes = data.data || [];
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarMedicos() {
         try {
-            const response = await fetchConAuth(`${API_URL}/medicos`);
+            const response = await fetchConAuth(`${API_BASE_URL}/medicos`);
             const data = await response.json();
             if (data.success) {
                 medicos = data.data || [];
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </tr>
                 `;
             }
-            const response = await fetch(`${API_URL}/citas`, {
+            const response = await fetch(`${API_BASE_URL}/citas`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
@@ -492,7 +492,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             const citaId = document.getElementById('citaId')?.value;
-            const url = citaId ? `${API_URL}/citas/${citaId}` : `${API_URL}/citas`;
+            const url = citaId ? `${API_BASE_URL}/citas/${citaId}` : `${API_BASE_URL}/citas`;
             const method = citaId ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
@@ -526,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!medicoId || !fecha || !hora) return;
 
         try {
-            const response = await fetchConAuth(`${API_URL}/citas/disponibilidad/verificar?medico_id=${medicoId}&fecha=${fecha}&hora=${hora}`);
+            const response = await fetchConAuth(`${API_BASE_URL}/citas/disponibilidad/verificar?medico_id=${medicoId}&fecha=${fecha}&hora=${hora}`);
             const data = await response.json();
             if (data.success && !data.disponible) {
                 alert('Este horario no está disponible. Por favor seleccione otro.');
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.cancelarCita = async function(id) {
         if (confirm('¿Está seguro de cancelar esta cita?')) {
             try {
-                const response = await fetchConAuth(`${API_URL}/citas/${id}/estado`, {
+                const response = await fetchConAuth(`${API_BASE_URL}/citas/${id}/estado`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ estado: 'Cancelada' })

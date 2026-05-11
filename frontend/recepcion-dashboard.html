@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recepción | Hogar Médico del Valle</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Unificado -->
+    <link rel="stylesheet" href="css/recepcion.css">
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a href="recepcion-dashboard.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="recepcion-citas.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Citas</span>
+            </a>
+            <a href="recepcion-pacientes.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Pacientes</span>
+            </a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Recepcionista</span>
+                <span class="user-role">Recepcionista</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-home"></i>
+                Panel de Recepción
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+                <button class="btn-primary" onclick="window.location.href='recepcion-citas.html'">
+                    <i class="fas fa-plus"></i> Nueva Cita
+                </button>
+            </div>
+        </header>
+
+        <!-- TARJETAS DE RESUMEN -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#3498db,#2980b9)">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Citas de Hoy</p>
+                    <h2 class="stat-number" id="citasHoy">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#27ae60,#219a52)">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Confirmadas</p>
+                    <h2 class="stat-number" id="citasConfirmadas">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#f39c12,#e67e22)">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Pendientes</p>
+                    <h2 class="stat-number" id="citasPendientes">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#9b59b6,#8e44ad)">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Total Pacientes</p>
+                    <h2 class="stat-number" id="totalPacientes">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- AGENDA DEL DÍA -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-calendar-day"></i> Agenda de Hoy</h3>
+                <a href="recepcion-citas.html" class="btn-ver-todas">Ver todas →</a>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Paciente</th>
+                            <th>Documento</th>
+                            <th>Médico</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agendaBody">
+                        <tr><td colspan="6" class="loading-msg"><i class="fas fa-spinner fa-spin"></i> Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRÓXIMAS CITAS -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-calendar-week"></i> Próximas Citas</h3>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proximasBody">
+                        <tr><td colspan="6" class="loading-msg"><i class="fas fa-spinner fa-spin"></i> Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/recepcion-dashboard.js"></script>
+</body>
+</html>

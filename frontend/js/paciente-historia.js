@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 let pacienteData = null;
 let historiasData = [];
 let historiaSeleccionada = null;
@@ -26,15 +26,13 @@ async function cargarDatos(usuario) {
     const headers = { 'Authorization': `Bearer ${token}` };
 
     try {
-        const resPacientes = await fetch(`${API_URL}/pacientes`, { headers });
-        const dataPacientes = await resPacientes.json();
-        const paciente = dataPacientes.data?.find(p => p.email === usuario.email);
-        if (!paciente) return;
-
+const paciente = usuario;
+paciente.id = usuario.paciente_id;
+if (!paciente.id) return;
         pacienteData = paciente;
         mostrarInfoPaciente(paciente);
 
-        const resHistorias = await fetch(`${API_URL}/historias/paciente/${paciente.id}`, { headers });
+        const resHistorias = await fetch(`${API_BASE_URL}/historias/paciente/${paciente.id}`, { headers });
         const dataHistorias = await resHistorias.json();
         historiasData = dataHistorias.data || [];
         document.getElementById('totalConsultas').textContent = `${historiasData.length} consulta(s)`;
@@ -188,6 +186,7 @@ window.descargarPDF = function(id) {
 
     doc.save(`historia_clinica_${pacienteData.nombre.replace(/ /g,'_')}_${new Date(h.fecha).toLocaleDateString('es-ES').replace(/\//g,'-')}.pdf`);
 };
+
 
 function descargarTodo() {
     if (!historiasData.length) { alert('No hay historias para descargar'); return; }

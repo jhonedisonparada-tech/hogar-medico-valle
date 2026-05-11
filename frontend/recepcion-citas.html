@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas | Recepción - Hogar Médico del Valle</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Unificado -->
+    <link rel="stylesheet" href="css/recepcion.css">
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a href="recepcion-dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="recepcion-citas.html" class="nav-item active">
+                <i class="fas fa-calendar-check"></i>
+                <span>Citas</span>
+            </a>
+            <a href="recepcion-pacientes.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Pacientes</span>
+            </a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Recepcionista</span>
+                <span class="user-role">Recepcionista</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-calendar-check"></i>
+                Gestión de Citas
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+                <button class="btn-primary" id="nuevaCitaBtn">
+                    <i class="fas fa-plus"></i> Nueva Cita
+                </button>
+            </div>
+        </header>
+
+        <!-- TARJETAS DE RESUMEN -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#3498db,#2980b9)">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Citas de Hoy</p>
+                    <h2 class="stat-number" id="citasHoy">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#27ae60,#219a52)">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Confirmadas</p>
+                    <h2 class="stat-number" id="citasConfirmadas">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#f39c12,#e67e22)">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Pendientes</p>
+                    <h2 class="stat-number" id="citasPendientes">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg,#9b59b6,#8e44ad)">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Total Pacientes</p>
+                    <h2 class="stat-number" id="totalPacientes">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA DE CITAS -->
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-list"></i> Listado de Citas</h3>
+                <span id="totalCitas">0 citas</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Especialidad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citasBody">
+                        <tr><td colspan="7" class="loading-msg"><i class="fas fa-spinner fa-spin"></i> Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL NUEVA CITA -->
+    <div class="modal" id="modalNuevaCita" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-plus"></i> Nueva Cita</h3>
+                <button class="modal-close" id="cerrarModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevaCita">
+                    <div class="form-group">
+                        <label>Paciente</label>
+                        <select id="pacienteId" required>
+                            <option value="">Seleccione un paciente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Médico</label>
+                        <select id="medicoId" required>
+                            <option value="">Seleccione un médico</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha</label>
+                            <input type="date" id="fechaCita" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hora</label>
+                            <select id="selectHora" name="hora" required style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px; font-size:14px; font-family:Inter, sans-serif; background:white;">
+                                <option value="">Seleccione una hora</option>
+                                <option value="07:00">07:00 AM</option>
+                                <option value="07:30">07:30 AM</option>
+                                <option value="08:00">08:00 AM</option>
+                                <option value="08:30">08:30 AM</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="09:30">09:30 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="10:30">10:30 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="11:30">11:30 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="12:30">12:30 PM</option>
+                                <option value="13:00">01:00 PM</option>
+                                <option value="13:30">01:30 PM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="14:30">02:30 PM</option>
+                                <option value="15:00">03:00 PM</option>
+                                <option value="15:30">03:30 PM</option>
+                                <option value="16:00">04:00 PM</option>
+                                <option value="16:30">04:30 PM</option>
+                                <option value="17:00">05:00 PM</option>
+                                <option value="17:30">05:30 PM</option>
+                                <option value="18:00">06:00 PM</option>
+                                <option value="18:30">06:30 PM</option>
+                                <option value="19:00">07:00 PM</option>
+                                <option value="19:30">07:30 PM</option>
+                                <option value="20:00">08:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Motivo</label>
+                        <textarea id="motivoCita" rows="2" placeholder="Motivo de la consulta..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelarModal">Cancelar</button>
+                <button class="btn-primary" id="guardarCita" style="background: #27ae60;">Guardar Cita</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/recepcion-citas.js"></script>
+</body>
+</html>

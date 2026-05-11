@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 let pacienteId = null;
 let todasLasCitas = [];
 
@@ -32,11 +32,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
     document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.clear(); window.location.href = 'login.html'; });
 
-    const res = await fetch(`${API_URL}/pacientes`, { headers: { 'Authorization': `Bearer ${token}` } });
-    const data = await res.json();
-    const paciente = data.data?.find(p => p.email === usuario.email);
-    if (paciente) { pacienteId = paciente.id; cargarCitas(); }
-
+pacienteId = usuario.paciente_id;
+if (pacienteId) cargarCitas();
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -85,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function cargarCitas() {
     const tbody = document.getElementById('citasBody');
     try {
-        const res = await fetch(`${API_URL}/citas/paciente/${pacienteId}`, {
+        const res = await fetch(`${API_BASE_URL}/citas/paciente/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await res.json();
@@ -146,7 +143,7 @@ async function guardarCita() {
     }
 
     try {
-        const res = await fetch(`${API_URL}/citas`, {
+        const res = await fetch(`${API_BASE_URL}/citas`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -178,7 +175,7 @@ async function guardarCita() {
 window.cancelarCita = async function(id) {
     if (!confirm('¿Está seguro que desea cancelar esta cita?')) return;
     try {
-        const res = await fetch(`${API_URL}/citas/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/citas/${id}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,

@@ -12,7 +12,15 @@ exports.obtenerPacientes = async (req, res) => {
 
 exports.obtenerPacientePorId = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM pacientes WHERE id = ?', [req.params.id]);
+        const { id } = req.params;
+        const usuario = req.usuario;
+
+        // Si es Paciente, solo puede ver su propio perfil
+        if (usuario.rol === 'Paciente' && usuario.paciente_id != id) {
+            return res.status(403).json({ success: false, message: 'No autorizado para ver este paciente.' });
+        }
+
+        const [rows] = await pool.query('SELECT * FROM pacientes WHERE id = ?', [id]);
         if (rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Paciente no encontrado' });
         }
@@ -27,7 +35,6 @@ exports.crearPaciente = async (req, res) => {
     try {
         const { nombre, documento, telefono, email, direccion, fecha_nacimiento, genero, activo } = req.body;
 
-        // Validaciones básicas
         if (!nombre || nombre.trim().length === 0) {
             return res.status(400).json({ success: false, message: 'El nombre es obligatorio y no puede estar vacío' });
         }

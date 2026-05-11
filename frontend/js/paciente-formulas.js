@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 let pacienteData = null;
 let formulasData = [];
 
@@ -29,15 +29,13 @@ async function cargarDatos(usuario) {
     const headers = { 'Authorization': `Bearer ${token}` };
 
     try {
-        const resPacientes = await fetch(`${API_URL}/pacientes`, { headers });
-        const dataPacientes = await resPacientes.json();
-        const paciente = dataPacientes.data?.find(p => p.email === usuario.email);
-        if (!paciente) return;
+const paciente = { ...usuario, id: usuario.paciente_id };
+if (!paciente.id) return;
         pacienteData = paciente;
 
-        const resForm = await fetch(`${API_URL}/incapacidades/paciente/${paciente.id}`, { headers });
+        const resForm = await fetch(`${API_BASE_URL}/incapacidades/paciente/${paciente.id}`, { headers });
 
-        const resMeds = await fetch(`${API_URL}/medico/formulas/${paciente.id}`, { headers });
+        const resMeds = await fetch(`${API_BASE_URL}/medico/formulas/${paciente.id}`, { headers });
         const dataMeds = await resMeds.json();
         formulasData = dataMeds.data || [];
         renderFormulas(formulasData);
@@ -57,7 +55,10 @@ function renderFormulas(formulas) {
     }
     container.innerHTML = formulas.map(f => {
         let medicamentos = [];
-        try { medicamentos = JSON.parse(f.medicamentos || '[]'); } catch(e) {}
+       try { 
+    medicamentos = typeof f.medicamentos === 'string' ? JSON.parse(f.medicamentos) : Array.isArray(f.medicamentos) ? f.medicamentos : [];
+} catch(e) { medicamentos = []; }
+        
         return `
         <div class="section-card" style="margin-bottom:20px;">
             <div class="section-header">
@@ -98,7 +99,9 @@ window.descargarPDF = function(id) {
     if (!f || !pacienteData) return;
 
     let medicamentos = [];
-    try { medicamentos = JSON.parse(f.medicamentos || '[]'); } catch(e) {}
+  try { 
+    medicamentos = typeof f.medicamentos === 'string' ? JSON.parse(f.medicamentos) : (f.medicamentos || []);
+} catch(e) { medicamentos = []; }
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();

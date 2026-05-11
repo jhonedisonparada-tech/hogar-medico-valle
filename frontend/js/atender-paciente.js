@@ -2,7 +2,7 @@
 // ATENDER PACIENTE - HOGAR MÉDICO DEL VALLE
 // ============================================
 
-const API_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 document.addEventListener('DOMContentLoaded', function () {
     const token   = localStorage.getItem('token');
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // ============================================
 async function cargarPaciente(pacienteId, token) {
     try {
-        const res  = await fetch(`${API_URL}/pacientes/${pacienteId}`, {
+        const res  = await fetch(`${API_BASE_URL}/pacientes/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
@@ -186,7 +186,7 @@ async function guardarConsulta(pacienteId, citaId, usuario, token) {
     };
 
     try {
-        const res  = await fetch(`${API_URL}/historias`, {
+        const res  = await fetch(`${API_BASE_URL}/historias`, {
             method:  'POST',
             headers: {
                 'Content-Type':  'application/json',
@@ -200,7 +200,7 @@ async function guardarConsulta(pacienteId, citaId, usuario, token) {
         if (data.success) {
             // Si viene de una cita, marcarla como completada
             if (citaId) {
-                await fetch(`${API_URL}/citas/${citaId}/estado`, {
+                await fetch(`${API_BASE_URL}/citas/${citaId}/estado`, {
                     method:  'PATCH',
                     headers: {
                         'Content-Type':  'application/json',

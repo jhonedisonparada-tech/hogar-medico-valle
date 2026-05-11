@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/medico.css">
     <style>
-        /* Estilos adicionales para las nuevas tablas */
         .seccion-container {
             background: white;
             border-radius: 16px;
@@ -50,32 +49,16 @@
             border-bottom: 1px solid #edf2f7;
             color: #334155;
         }
-        .tabla-ordenes tbody tr:hover {
-            background: #f1f5f9;
-        }
-        .badge-estado {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
-        }
+        .tabla-ordenes tbody tr:hover { background: #f1f5f9; }
+        .badge-estado { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
         .badge-pendiente { background: #fff3cd; color: #856404; }
         .badge-completado { background: #d4edda; color: #155724; }
         .badge-cancelado { background: #f8d7da; color: #721c24; }
-        .btn-accion {
-            background: none;
-            border: none;
-            color: #64748b;
-            cursor: pointer;
-            padding: 5px 10px;
-            font-size: 1rem;
-        }
+        .btn-accion { background: none; border: none; color: #64748b; cursor: pointer; padding: 5px 10px; font-size: 1rem; }
         .btn-accion:hover { color: #3498db; }
     </style>
 </head>
 <body>
-    <!-- BARRA LATERAL -->
     <div class="sidebar">
         <div class="logo-container">
             <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
@@ -105,7 +88,6 @@
             </div>
         </header>
 
-        <!-- BUSCADOR DE PACIENTE -->
         <div class="buscador-container">
             <div class="search-box-large">
                 <i class="fas fa-search"></i>
@@ -115,7 +97,6 @@
             <div class="search-results" id="resultadosBusqueda" style="display: none;"></div>
         </div>
 
-        <!-- DATOS DEL PACIENTE -->
         <div class="paciente-info-card" id="infoPaciente" style="display: none;">
             <div class="info-grid">
                 <div class="info-item"><span class="info-label">Nombre</span><span class="info-value" id="pacienteNombre">-</span></div>
@@ -127,10 +108,7 @@
             </div>
         </div>
 
-        <!-- CONTENEDOR DE SECCIONES -->
         <div id="seccionesContainer" style="display: none;">
-            
-            <!-- CONSULTAS -->
             <div class="seccion-container">
                 <div class="seccion-titulo">
                     <h3><i class="fas fa-notes-medical"></i> Consultas</h3>
@@ -139,7 +117,6 @@
                 <div class="timeline" id="consultasTimeline"></div>
             </div>
 
-            <!-- ORDENAMIENTOS / PARACLÍNICOS -->
             <div class="seccion-container">
                 <div class="seccion-titulo">
                     <h3><i class="fas fa-flask" style="color:#9b59b6;"></i> Ordenamientos / Paraclínicos</h3>
@@ -155,11 +132,10 @@
                 </div>
             </div>
 
-            <!-- MEDICAMENTOS -->
             <div class="seccion-container">
                 <div class="seccion-titulo">
                     <h3><i class="fas fa-pills" style="color:#27ae60;"></i> Medicamentos</h3>
-                    <button class="btn-primary" onclick="nuevoMedicamento()"><i class="fas fa-plus"></i> Recetar</button>
+                    <button class="btn-primary" onclick="nuevoMedicamento()"><i class="fas fa-plus"></i> Nueva Fórmula</button>
                 </div>
                 <div class="table-responsive">
                     <table class="tabla-ordenes">
@@ -171,7 +147,6 @@
                 </div>
             </div>
 
-            <!-- INCAPACIDADES -->
             <div class="seccion-container">
                 <div class="seccion-titulo">
                     <h3><i class="fas fa-file-medical" style="color:#e67e22;"></i> Incapacidades</h3>
@@ -186,11 +161,10 @@
                     </table>
                 </div>
             </div>
-
-            <!-- OTRAS SECCIONES (Laboratorios, Fórmulas, Interconsultas, Imágenes, Órdenes) pueden ir aquí si existen -->
         </div>
     </main>
 
+    <script src="js/config.js"></script>
     <script src="js/medico-historias.js"></script>
 </body>
 </html>

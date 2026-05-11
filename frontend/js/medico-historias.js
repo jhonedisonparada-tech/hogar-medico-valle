@@ -17,9 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btnBuscar').addEventListener('click', buscarPaciente);
     document.getElementById('buscarDocumento').addEventListener('keypress', e => { if (e.key === 'Enter') buscarPaciente(); });
     document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.clear(); window.location.href = 'login.html'; });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const pacienteId = urlParams.get('paciente');
+    if (pacienteId) seleccionarPaciente(pacienteId);
 });
 
-const API_URL = 'http://localhost:3000/api';
 let pacienteActual = null;
 
 function mostrarFecha() {
@@ -28,7 +31,6 @@ function mostrarFecha() {
     });
 }
 
-// ==================== BUSCADOR ====================
 async function buscarPaciente() {
     const doc = document.getElementById('buscarDocumento').value.trim();
     if (!doc) { alert('Ingrese un número de documento'); return; }
@@ -36,7 +38,7 @@ async function buscarPaciente() {
     resultadosDiv.style.display = 'block';
     resultadosDiv.innerHTML = '<div class="loading-message"><i class="fas fa-spinner fa-spin"></i> Buscando...</div>';
     try {
-        const response = await fetch(`${API_URL}/pacientes`, {
+        const response = await fetch(`${API_BASE_URL}/pacientes`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await response.json();
@@ -59,11 +61,10 @@ async function buscarPaciente() {
     }
 }
 
-// ==================== SELECCIONAR PACIENTE ====================
 window.seleccionarPaciente = async function(pacienteId) {
     pacienteActual = pacienteId;
     try {
-        const response = await fetch(`${API_URL}/pacientes/${pacienteId}`, {
+        const response = await fetch(`${API_BASE_URL}/pacientes/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await response.json();
@@ -101,11 +102,10 @@ function calcularEdad(fechaNac) {
     return edad + ' años';
 }
 
-// ==================== CARGAR CONSULTAS ====================
 async function cargarConsultas(pacienteId) {
     const timeline = document.getElementById('consultasTimeline');
     try {
-        const response = await fetch(`${API_URL}/historias/paciente/${pacienteId}`, {
+        const response = await fetch(`${API_BASE_URL}/historias/paciente/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await response.json();
@@ -129,12 +129,10 @@ async function cargarConsultas(pacienteId) {
     }
 }
 
-// ==================== PARACLÍNICOS ====================
 async function cargarParaclinicos(pacienteId) {
     const tbody = document.getElementById('paraclinicosBody');
     try {
-        // Suponiendo que tienes un endpoint /api/ordenamientos/paciente/:id
-        const response = await fetch(`${API_URL}/ordenamientos/paciente/${pacienteId}`, {
+        const response = await fetch(`${API_BASE_URL}/ordenamientos/paciente/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await response.json();
@@ -158,18 +156,19 @@ async function cargarParaclinicos(pacienteId) {
     }
 }
 
-// ==================== MEDICAMENTOS (desde fórmulas) ====================
 async function cargarMedicamentos(pacienteId) {
     const tbody = document.getElementById('medicamentosBody');
     try {
-        const response = await fetch(`${API_URL}/medico/formulas/${pacienteId}`, {
+        const response = await fetch(`${API_BASE_URL}/medico/formulas/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await response.json();
         if (data.data && data.data.length) {
             let allMeds = [];
             data.data.forEach(f => {
-                const meds = JSON.parse(f.medicamentos || '[]');
+                const meds = typeof f.medicamentos === 'string'
+                    ? JSON.parse(f.medicamentos || '[]')
+                    : (f.medicamentos || []);
                 meds.forEach(m => allMeds.push({ fecha: f.fecha, ...m }));
             });
             tbody.innerHTML = allMeds.map(m => `
@@ -179,7 +178,7 @@ async function cargarMedicamentos(pacienteId) {
                     <td>${m.dosis}</td>
                     <td>${m.frecuencia}</td>
                     <td>${m.duracion || '-'}</td>
-                    <td><button class="btn-accion" onclick="imprimirReceta(${m.id})"><i class="fas fa-print"></i></button></td>
+                    <td><button class="btn-accion" onclick="imprimirReceta()"><i class="fas fa-print"></i></button></td>
                 </tr>
             `).join('');
         } else {
@@ -191,11 +190,10 @@ async function cargarMedicamentos(pacienteId) {
     }
 }
 
-// ==================== INCAPACIDADES ====================
 async function cargarIncapacidades(pacienteId) {
     const tbody = document.getElementById('incapacidadesBody');
     try {
-        const response = await fetch(`${API_URL}/incapacidades/paciente/${pacienteId}`, {
+        const response = await fetch(`${API_BASE_URL}/incapacidades/paciente/${pacienteId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await response.json();
@@ -219,14 +217,13 @@ async function cargarIncapacidades(pacienteId) {
     }
 }
 
-// ==================== ACCIONES DE BOTONES ====================
 window.nuevaConsulta = function() {
     if (pacienteActual) window.location.href = `atender-paciente.html?paciente=${pacienteActual}`;
     else alert('Seleccione un paciente');
 };
 
 window.nuevoParaclinico = function() {
-    if (pacienteActual) window.location.href = `nueva-orden-paraclinico.html?paciente=${pacienteActual}`;
+    if (pacienteActual) window.location.href = `medico-paraclinicos.html?paciente=${pacienteActual}`;
     else alert('Seleccione un paciente');
 };
 
@@ -240,7 +237,6 @@ window.nuevaIncapacidad = function() {
     else alert('Seleccione un paciente');
 };
 
-// Funciones de ejemplo para ver/ imprimir (puedes implementarlas después)
 window.verOrden = function(id) { alert('Ver orden ' + id); };
-window.imprimirReceta = function(id) { alert('Imprimir receta ' + id); };
+window.imprimirReceta = function() { alert('Función de impresión en desarrollo'); };
 window.imprimirIncapacidad = function(id) { alert('Imprimir incapacidad ' + id); };

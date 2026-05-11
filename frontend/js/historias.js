@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Historias.js cargado correctamente');
 
-    const API_URL = 'http://localhost:3000/api';
+    const API_BASE_URL = 'http://localhost:5000/api';
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarPacientes() {
         try {
-            const response = await fetch(`${API_URL}/pacientes`, {
+            const response = await fetch(`${API_BASE_URL}/pacientes`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarMedicos() {
         try {
-            const response = await fetchConAuth(`${API_URL}/medicos`);
+            const response = await fetchConAuth(`${API_BASE_URL}/medicos`);
             const data = await response.json();
             if (data.success) {
                 const select = document.getElementById('historiaMedicoId');
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarInfoPaciente(pacienteId) {
         try {
-            const response = await fetchConAuth(`${API_URL}/pacientes/${pacienteId}`);
+            const response = await fetchConAuth(`${API_BASE_URL}/pacientes/${pacienteId}`);
             const data = await response.json();
             if (!data.success) return;
 
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!tbody) return;
 
         try {
-            const response = await fetch(`${API_URL}/historias/paciente/${pacienteId}`, {
+            const response = await fetch(`${API_BASE_URL}/historias/paciente/${pacienteId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function imprimirHistoria(id) {
-        window.open(`${API_URL}/historias/${id}/imprimir`, '_blank');
+        window.open(`${API_BASE_URL}/historias/${id}/imprimir`, '_blank');
     }
 
     function calcularEdad(fechaNac) {
@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         try {
-            const response = await fetchConAuth(`${API_URL}/historias`, {
+            const response = await fetchConAuth(`${API_BASE_URL}/historias`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(historiaData)
@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const historiaId = data.id;
 
                 for (const desc of paraclinicos) {
-                    await fetchConAuth(`${API_URL}/ordenamientos`, {
+                    await fetchConAuth(`${API_BASE_URL}/ordenamientos`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 for (const med of medicamentos) {
-                    await fetchConAuth(`${API_URL}/medicamentos`, {
+                    await fetchConAuth(`${API_BASE_URL}/medicamentos`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const dias = parseInt(document.getElementById('incapacidadDias')?.value) || 0;
                 if (dias > 0) {
-                    await fetchConAuth(`${API_URL}/incapacidades`, {
+                    await fetchConAuth(`${API_BASE_URL}/incapacidades`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({

@@ -1,83 +1,60 @@
 const express = require('express');
-const jwt     = require('jsonwebtoken');
-const bcrypt  = require('bcrypt');
-const pool    = require('../config/db');
-const router  = express.Router();
+const router = express.Router();
+const jwt = require('jsonwebtoken');
+const pool = require('../config/db');
+const bcrypt = require('bcrypt');
 
-// ============================================
-// POST /api/auth/login
-// ============================================
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+        const [rows] = await pool.execute('SELECT * FROM usuarios WHERE email = ?', [email]);
 
-        if (!email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: 'Email y contraseña son requeridos.'
-            });
+        if (rows.length === 0) {
+            return res.status(401).json({ success: false, message: 'Credenciales inválidas' });
         }
 
-        const [users] = await pool.execute(
-            `SELECT id, nombre, email, password, rol, medico_id, paciente_id
-             FROM usuarios
-             WHERE email = ? AND activo = 1`,
-            [email]
-        );
-
-        if (users.length === 0) {
-            return res.status(401).json({
-                success: false,
-                message: 'El correo electrónico no está registrado.'
-            });
-        }
-
-        const user = users[0];
-        const passwordValida = await bcrypt.compare(password, user.password);
+        const usuario = rows[0];
+        const passwordValida = await bcrypt.compare(password, usuario.password);
 
         if (!passwordValida) {
-            return res.status(401).json({
-                success: false,
-                message: 'La contraseña es incorrecta.'
-            });
+            return res.status(401).json({ success: false, message: 'Credenciales inválidas' });
         }
 
-        // ✅ JWT_SECRET desde variable de entorno — nunca hardcodeado
+        let paciente_id = null;
+        if (usuario.rol === 'Paciente') {
+            const [pacRows] = await pool.execute(
+                'SELECT id FROM pacientes WHERE email = ?',
+                [usuario.email]
+            );
+            if (pacRows.length > 0) paciente_id = pacRows[0].id;
+        }
+
+        let medico_id = null;
+        if (usuario.rol === 'Médico') {
+            const [medRows] = await pool.execute(
+                'SELECT id FROM medicos WHERE email = ?',
+                [usuario.email]
+            );
+            if (medRows.length > 0) medico_id = medRows[0].id;
+        }
+
         const token = jwt.sign(
-            {
-                id:          user.id,
-                email:       user.email,
-                nombre:      user.nombre,
-                rol:         user.rol,
-                medico_id:   user.medico_id,
-                paciente_id: user.paciente_id
-            },
+            { id: usuario.id, email: usuario.email, rol: usuario.rol, paciente_id, medico_id },
             process.env.JWT_SECRET,
             { expiresIn: '8h' }
         );
 
-        await pool.execute(
-            'UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?',
-            [user.id]
-        );
-
-        res.json({
-            success: true,
-            message: 'Login exitoso.',
-            token,
-            usuario: {
-                id:          user.id,
-                nombre:      user.nombre,
-                email:       user.email,
-                rol:         user.rol,
-                medico_id:   user.medico_id,
-                paciente_id: user.paciente_id
-            }
-        });
+        res.json({ success: true, token, usuario: {
+            id: usuario.id,
+            nombre: usuario.nombre,
+            email: usuario.email,
+            rol: usuario.rol,
+            paciente_id,
+            medico_id
+        }});
 
     } catch (error) {
-        console.error('❌ Error en login:', error);
-        res.status(500).json({ success: false, message: 'Error interno del servidor.' });
+        res.status(500).json({ success: false, message: 'Error en el servidor' });
     }
 });
 

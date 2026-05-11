@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userRoleSpan = document.getElementById('userRole');
 
     // Configuración de la API
-    const API_URL = 'http://localhost:3000/api';
+    const API_BASE_URL = 'http://localhost:5000/api';
 
     // Verificar sesión
     const token = localStorage.getItem('token');
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
             }
 
-            const response = await fetch(`${API_URL}/pacientes`, {
+            const response = await fetch(`${API_BASE_URL}/pacientes`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -175,16 +175,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         </span>
                     </td>
                     <td>
-                        <button class="action-btn" onclick="window.editarPaciente(${p.id})" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete" onclick="window.eliminarPaciente(${p.id})" title="Eliminar">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                        <button class="action-btn" onclick="window.verHistoria(${p.id})" title="Historia Clínica">
-                            <i class="fas fa-notes-medical"></i>
-                        </button>
-                    </td>
+                    <button class="action-btn btn-editar" onclick="window.editarPaciente(${p.id})">
+                      <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="action-btn btn-eliminar" onclick="window.eliminarPaciente(${p.id})">
+                      <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                    <button class="action-btn btn-historia" onclick="window.verHistoria(${p.id})">
+                       <i class="fas fa-notes-medical"></i> Historia
+                    </button>                  
+                 </td>
                 </tr>
             `;
         }).join('');
@@ -292,11 +292,11 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             const pacienteId = document.getElementById('pacienteId').value;
-            let url = `${API_URL}/pacientes`;
+            let url = `${API_BASE_URL}/pacientes`;
             let method = 'POST';
 
             if (pacienteId) {
-                url = `${API_URL}/pacientes/${pacienteId}`;
+                url = `${API_BASE_URL}/pacientes/${pacienteId}`;
                 method = 'PUT';
             }
 
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.eliminarPaciente = async function(id) {
         if (confirm('¿Está seguro de eliminar este paciente?')) {
             try {
-                const response = await fetch(`${API_URL}/pacientes/${id}`, {
+                const response = await fetch(`${API_BASE_URL}/pacientes/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`

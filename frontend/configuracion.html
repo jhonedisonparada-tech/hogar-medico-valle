@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text"><strong>Hogar Médico</strong> del Valle</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Inicio</span></a>
+            <a href="pacientes.html" class="nav-item"><i class="fas fa-users"></i><span>Pacientes</span></a>
+            <a href="medicos.html" class="nav-item"><i class="fas fa-user-md"></i><span>Médicos</span></a>
+            <a href="citas.html" class="nav-item"><i class="fas fa-calendar-check"></i><span>Citas</span></a>
+            <a href="historias.html" class="nav-item"><i class="fas fa-notes-medical"></i><span>Historias</span></a>
+            <a href="configuracion.html" class="nav-item active"><i class="fas fa-cog"></i><span>Configuración</span></a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Administrador</span>
+                <span class="user-role" id="userRole">Admin</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title"><i class="fas fa-cog"></i> Configuración</h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+            </div>
+        </header>
+
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; text-align:center;">
+            <div style="background:white; border-radius:20px; padding:60px 80px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+                <div style="width:100px; height:100px; background:linear-gradient(135deg,#3498db,#2980b9); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 30px;">
+                    <i class="fas fa-tools" style="font-size:2.5rem; color:white;"></i>
+                </div>
+                <h2 style="font-size:1.8rem; font-weight:800; color:#1e293b; margin-bottom:12px;">Módulo en construcción</h2>
+                <p style="color:#64748b; font-size:1rem; margin-bottom:30px; max-width:400px;">Este módulo estará disponible próximamente.</p>
+                <a href="dashboard.html" style="background:linear-gradient(135deg,#3498db,#2980b9); color:white; border:none; border-radius:12px; padding:14px 32px; font-size:1rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                    <i class="fas fa-arrow-left"></i> Volver al inicio
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = 'login.html';
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        document.getElementById('userName').textContent = usuario.nombre || 'Administrador';
+        document.getElementById('userRole').textContent = usuario.rol || 'Admin';
+        document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.clear(); window.location.href = 'login.html'; });
+        const hoy = new Date();
+        document.getElementById('fechaActual').textContent = hoy.toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    </script>
+</body>
+</html>

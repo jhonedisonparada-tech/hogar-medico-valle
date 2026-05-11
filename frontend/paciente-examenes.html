@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Exámenes | Hogar Médico del Valle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/paciente.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text"><strong>Hogar Médico</strong> del Valle</div>
+        </div>
+        <nav class="nav-menu">
+            <a href="paciente-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Inicio</span></a>
+            <a href="paciente-citas.html" class="nav-item"><i class="fas fa-calendar-check"></i><span>Mis Citas</span></a>
+            <a href="paciente-historia.html" class="nav-item"><i class="fas fa-notes-medical"></i><span>Mi Historia</span></a>
+            <a href="paciente-incapacidades.html" class="nav-item"><i class="fas fa-file-medical"></i><span>Incapacidades</span></a>
+            <a href="paciente-formulas.html" class="nav-item"><i class="fas fa-pills"></i><span>Fórmulas</span></a>
+            <a href="paciente-examenes.html" class="nav-item active"><i class="fas fa-flask"></i><span>Exámenes</span></a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar"><i class="fas fa-user-circle"></i></div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Paciente</span>
+                <span class="user-role">Paciente</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title"><i class="fas fa-flask"></i> Mis Órdenes de Exámenes</h1>
+            <div class="header-actions">
+                <div class="date-display"><i class="far fa-calendar-alt"></i> <span id="fechaActual"></span></div>
+            </div>
+        </header>
+
+        <div class="section-card">
+            <div class="section-header">
+                <h3><i class="fas fa-list"></i> Listado de Exámenes</h3>
+                <span id="totalExamenes" style="color:var(--gray-500); font-size:0.9rem;"></span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <<thead>
+    <tr>
+        <th>Fecha Orden</th>
+        <th>Examen</th>
+        <th>Indicaciones</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+</thead>
+                    <tbody id="examenesBody">
+                        <tr><td colspan="6" class="loading-msg"><i class="fas fa-spinner fa-spin"></i> Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/paciente-examenes.js"></script>
+</body>
+</html>

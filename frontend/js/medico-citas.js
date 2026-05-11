@@ -39,11 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Función para cargar las citas desde la API
     async function cargarCitas(filtroInicial) {
-        const medicoId = usuario.medico_id;
+        const medicoId = usuario.medico_id || usuario.id;
         if (!medicoId) return;
 
         try {
-            const response = await fetch(`${API_URL}/citas/medico/${medicoId}`, {
+            const response = await fetch(`${API_BASE_URL}/citas/medico/${medicoId}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             if (!response.ok) throw new Error('Error al obtener citas');
@@ -130,8 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('');
     }
 });
-
-const API_URL = 'http://localhost:3000/api';
 
 function mostrarFecha() {
     const fecha = new Date().toLocaleDateString('es-ES', {
