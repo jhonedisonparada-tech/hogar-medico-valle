@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | Hogar Médico del Valle</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- BARRA LATERAL -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Hogar Médico del Valle" class="logo">
+            <div class="logo-text">
+                <strong>Hogar Médico</strong>
+                del Valle
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="pacientes.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Pacientes</span>
+            </a>
+            <a href="medicos.html" class="nav-item">
+                <i class="fas fa-user-md"></i>
+                <span>Médicos</span>
+            </a>
+            <a href="citas.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Citas</span>
+            </a>
+            <a href="historias.html" class="nav-item">
+                <i class="fas fa-notes-medical"></i>
+                <span>Historias</span>
+            </a>
+            <a href="configuracion.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+<span class="user-name" id="userName">Dr. Juan Pérez</span>
+<span class="user-role" id="userRole">Administrador</span>            
+        </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <!-- ENCABEZADO -->
+        <header class="header">
+            <h1 class="page-title">
+                <i class="fas fa-home"></i>
+                Panel Principal
+            </h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="fechaActual"></span>
+                </div>
+                <button class="btn-refresh" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- TARJETAS DE ESTADÍSTICAS -->
+        <div class="stats-grid">
+            <!-- Total Pacientes -->
+            <div class="stat-card" onclick="window.location.href='pacientes.html'">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Total Pacientes</span>
+                    <span class="stat-value" id="totalPacientes">0</span>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> +12% este mes
+                    </span>
+                </div>
+            </div>
+
+            <!-- Médicos Activos -->
+            <div class="stat-card" onclick="window.location.href='medicos.html'">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Médicos Activos</span>
+                    <span class="stat-value" id="totalMedicos">0</span>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> +3 nuevos
+                    </span>
+                </div>
+            </div>
+
+            <!-- Citas Hoy -->
+            <div class="stat-card" onclick="window.location.href='citas.html'">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Citas de Hoy</span>
+                    <span class="stat-value" id="citasHoy">0</span>
+                    <span class="stat-change">
+                        <i class="fas fa-clock"></i> Próximas 8
+                    </span>
+                </div>
+            </div>
+
+            <!-- Historias Clínicas -->
+            <div class="stat-card" onclick="window.location.href='historias.html'">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="fas fa-notes-medical"></i>
+                </div>
+                <div class="stat-details">
+                    <span class="stat-label">Historias Clínicas</span>
+                    <span class="stat-value" id="totalHistorias">0</span>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> +28 este mes
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRÁFICAS -->
+        <div class="charts-row">
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-chart-line"></i>
+                    Citas de la Semana
+                </h3>
+                <canvas id="citasChart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Distribución por Especialidad
+                </h3>
+                <canvas id="especialidadesChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- TABLA DE PRÓXIMAS CITAS -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>
+                    <i class="fas fa-clock"></i>
+                    Próximas Citas
+                </h3>
+                <a href="citas.html" class="btn-view-all">
+                    Ver Todas <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="citas-table">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Especialidad</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citasTableBody">
+                        <tr>
+                            <td colspan="7" class="loading-message">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Cargando citas...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TABLA DE ÚLTIMOS PACIENTES -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>
+                    <i class="fas fa-user-plus"></i>
+                    Últimos Pacientes Registrados
+                </h3>
+                <a href="pacientes.html" class="btn-view-all">
+                    Ver Todos <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="pacientes-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Documento</th>
+                            <th>Teléfono</th>
+                            <th>Email</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pacientesTableBody">
+                        <tr>
+                            <td colspan="6" class="loading-message">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Cargando pacientes...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+    document.getElementById('fechaActual').textContent = 
+        new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
